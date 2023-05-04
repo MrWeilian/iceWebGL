@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "resolveJsonModule": true,
-    "lib": ["esnext"]
+    "lib": ["esnext"],
+    "types": ["node"]
   }
 }

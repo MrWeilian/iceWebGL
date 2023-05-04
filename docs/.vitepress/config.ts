@@ -1,11 +1,14 @@
 import { defineConfig } from 'vitepress'
-import sidebar from './configs/sidebar'
+import { sidebar, mdPlugin } from './configs'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "iceWebGl",
   description: 'iceWebGl',
   lastUpdated: true,
+  markdown: {
+    config: (md) => mdPlugin(md)
+  },
   themeConfig: {
     logo: '',
     nav: [

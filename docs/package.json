@@ -6,6 +6,12 @@
   },
   "devDependencies": {
     "@types/node": "^18.0.3",
+    "markdown-it-container": "^3.0.0",
     "vitepress": "^1.0.0-alpha.75"
+  },
+  "dependencies": {
+    "@vueuse/core": "^10.1.2",
+    "prismjs": "^1.29.0",
+    "sass": "^1.62.1"
   }
 }
