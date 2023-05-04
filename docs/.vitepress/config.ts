@@ -1,28 +1,26 @@
 import { defineConfig } from 'vitepress'
+import sidebar from './configs/sidebar'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "iceWebGl",
-  description: "iceWebGl",
+  description: 'iceWebGl',
+  lastUpdated: true,
   themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
+    logo: '',
     nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' }
+      { text: '🧊 上车指南', activeMatch: '^/content', link: '/content/一、前言/1. 导读' }
     ],
 
-    sidebar: [
-      {
-        text: 'Examples',
-        items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
-        ]
-      }
-    ],
+    sidebar,
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/MrWeilian/iWebGl' }
-    ]
+    ],
+
+    footer: {
+      message: '',
+      copyright: 'Copyright © 2023-present 井柏然'
+    }
   }
 })

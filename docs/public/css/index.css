@@ -1,0 +1,11 @@
+body {
+  font-size: 16px;
+}
+
+:root {
+  --vp-c-brand: #4096ff;
+  --vp-c-brand-light: #9FD4FD;
+  --vp-c-brand-lighter: #E8F7FF;
+  --vp-c-brand-dark: #206CCF;
+  --vp-c-brand-darker: #114BA3;
+}

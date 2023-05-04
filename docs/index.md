@@ -3,16 +3,16 @@
 layout: home
 
 hero:
-  name: "iWebGl"
-  text: "iWebGl"
-  tagline: My great project tagline
+  name: "iceWebGl"
+  text: "WebGl上车指南"
+  tagline: 渐进式学习 WebGl
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: 立即出发
+      link: /content/二、WebGl基础/1. 初识WebGl
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: 导读
+      link: /content/一、前言/1. 导读
 
 features:
   - title: Feature A

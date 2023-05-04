@@ -1,0 +1,24 @@
+[
+  {
+    "text": "一、前言",
+    "collapsible": true,
+    "collapsed": false,
+    "items": [
+      {
+        "text": "1. 导读",
+        "link": "/content/一、前言/1. 导读"
+      }
+    ]
+  },
+  {
+    "text": "二、WebGl基础",
+    "collapsible": true,
+    "collapsed": false,
+    "items": [
+      {
+        "text": "1. 初识WebGl",
+        "link": "/content/二、WebGl基础/1. 初识WebGl"
+      }
+    ]
+  }
+]

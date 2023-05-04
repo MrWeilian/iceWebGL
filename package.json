@@ -4,5 +4,8 @@
   "scripts": {
     "docs:dev": "pnpm run -C docs docs:dev"
   },
-  "author": "井柏然"
+  "author": "井柏然",
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
 }
