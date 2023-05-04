@@ -1,0 +1,8 @@
+{
+  "name": "ice-webgl",
+  "description": "iceWebGl",
+  "scripts": {
+    "docs:dev": "pnpm run -C docs docs:dev"
+  },
+  "author": "井柏然"
+}
