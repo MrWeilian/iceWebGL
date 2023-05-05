@@ -41,7 +41,7 @@ export default function createSideBar () {
   return {
     buildStart: async () => {
       const sideBarArr = await getContentSideBar()
-      const outPutFile = `${outPutBasePath()}/sideBarConfig.json`
+      const outPutFile = `${outPutBasePath()}/sidebarConfig.json`
       const stat = await fsPromises.stat(outPutFile)
       if (stat.isFile()) {
         const json = await fsPromises.readFile(outPutFile, 'utf-8')

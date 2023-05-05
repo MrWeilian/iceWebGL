@@ -7,10 +7,15 @@
   "devDependencies": {
     "@types/node": "^18.0.3",
     "markdown-it-container": "^3.0.0",
+    "unplugin-vue-components": "^0.24.1",
     "vitepress": "^1.0.0-alpha.75"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
+    "@ice-webgl/demo": "workspace:*",
     "@vueuse/core": "^10.1.2",
+    "clipboard": "^2.0.11",
+    "element-plus": "^2.3.4",
     "prismjs": "^1.29.0",
     "sass": "^1.62.1"
   }

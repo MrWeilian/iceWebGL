@@ -1,5 +1,5 @@
-import sideBarConfig from './sideBarConfig.json'
+import sidebarConfig from './sidebarConfig.json'
 
 export default {
-  '/content': sideBarConfig
+  '/content': sidebarConfig
 }

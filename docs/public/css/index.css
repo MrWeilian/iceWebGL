@@ -8,4 +8,5 @@ body {
   --vp-c-brand-lighter: #E8F7FF;
   --vp-c-brand-dark: #206CCF;
   --vp-c-brand-darker: #114BA3;
+  --vp-border-radius: 6px;
 }
