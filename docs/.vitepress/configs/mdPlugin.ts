@@ -19,13 +19,11 @@ export default function mdPlugin (md) {
 
         const content = sourceFileToken?.children?.[0].content ?? ''
         const componentName = content.replace('/', '')
-        console.log('sourceFile', componentName)
 
         source = fs.readFileSync(
           path.resolve(rootPath, 'src', 'demo', `${content}.vue`),
           'utf-8'
         )
-        console.log('source', encodeURIComponent(source))
         const warp = code => `<pre v-pre><code>${code}</code></pre>`
         // opening tag
         return `

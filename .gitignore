@@ -6,3 +6,5 @@ npm-debug.log
 .history
 .env.local
 dist
+docs/.vitepress/cache
+.vitepress/cache
