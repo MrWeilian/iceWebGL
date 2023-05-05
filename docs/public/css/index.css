@@ -4,9 +4,13 @@ body {
 
 :root {
   --vp-c-brand: #4096ff;
-  --vp-c-brand-light: #9FD4FD;
-  --vp-c-brand-lighter: #E8F7FF;
+  --vp-c-brand-light: #57A9FB;
+  --vp-c-brand-lighter: #7BC0FC;
   --vp-c-brand-dark: #206CCF;
   --vp-c-brand-darker: #114BA3;
   --vp-border-radius: 6px;
+}
+
+.vp-doc div[class*='language-'] {
+  border-radius: var(--vp-border-radius);
 }

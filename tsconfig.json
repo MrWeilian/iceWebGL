@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "resolveJsonModule": true,
-    "lib": ["esnext"],
+    "lib": ["esnext", "dom"],
     "types": ["node"],
     "allowSyntheticDefaultImports": true
   }

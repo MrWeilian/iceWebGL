@@ -8,7 +8,9 @@
            :style="{ backgroundColor: icon.color }"
         />
       </div>
-      <slot name="demo"></slot>
+      <div class="demo-wrapper">
+        <slot name="demo"></slot>
+      </div>
     </div>
     <div class="options">
       <el-tooltip
@@ -93,6 +95,12 @@ $menu-height: 32px;
   border-radius: var(--vp-border-radius);
 }
 .demo {
+  .demo-wrapper {
+    padding: 16px;
+    width: 100%;
+    overflow: auto;
+    box-sizing: border-box;
+  }
   .menu {
     border-radius: var(--vp-border-radius) var(--vp-border-radius) 0 0;
     height: $menu-height;
