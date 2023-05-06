@@ -38,9 +38,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import ClipboardJS from 'clipboard'
-import 'prismjs/themes/prism-tomorrow.css'
+import 'prismjs/themes/prism-tomorrow.min.css'
 import { CopyDocument, CaretTop } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'

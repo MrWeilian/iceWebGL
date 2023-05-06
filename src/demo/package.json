@@ -1,5 +1,8 @@
 {
   "name": "@ice-webgl/demo",
   "description": "示例程序",
-  "author": ""
+  "author": "",
+  "dependencies": {
+    "@ice-webgl/utils": "workspace:*"
+  }
 }
