@@ -6,7 +6,7 @@ export default {
   plugins: [
     createSideBar(),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver({ ssr: true })],
     })
   ],
   resolve: {
