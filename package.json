@@ -2,7 +2,8 @@
   "name": "ice-webgl",
   "description": "iceWebGl",
   "scripts": {
-    "docs:dev": "pnpm run -C docs docs:dev"
+    "docs:dev": "pnpm run -C docs docs:dev",
+    "docs:build": "pnpm run -C docs docs:build"
   },
   "author": "井柏然",
   "devDependencies": {
