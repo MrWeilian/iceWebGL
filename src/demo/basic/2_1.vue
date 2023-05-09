@@ -14,22 +14,22 @@ import { createGl } from '@ice-webgl/utils'
 let gl
 
 const redFn = () => {
-  gl.clearColor(.9, 0., 0., .6)
+  gl.clearColor(.9, 0., 0., .8)
   gl.clear(gl.COLOR_BUFFER_BIT)
 }
 
 const greenFn = () => {
-  gl.clearColor(0., .9, 0., .6)
+  gl.clearColor(0., .9, 0., .8)
   gl.clear(gl.COLOR_BUFFER_BIT)
 }
 
 const blueFn = () => {
-  gl.clearColor(0., 0., .9, .6)
+  gl.clearColor(0., 0., .9, .8)
   gl.clear(gl.COLOR_BUFFER_BIT)
 }
 
 const blackFn = () => {
-  gl.clearColor(0., 0., .0, .6)
+  gl.clearColor(0., 0., .0, .8)
   gl.clear(gl.COLOR_BUFFER_BIT)
 }
 
