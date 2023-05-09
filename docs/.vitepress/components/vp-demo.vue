@@ -17,7 +17,7 @@
           content="复制代码"
           placement="bottom"
       >
-        <el-icon class="option-item copy-btn" :data-clipboard-text="decodeURIComponent(sourceCode)"><CopyDocument /></el-icon>
+        <el-icon ref="copyBtn" class="option-item" :data-clipboard-text="decodeURIComponent(sourceCode)"><CopyDocument /></el-icon>
       </el-tooltip>
       <el-tooltip
           content="查看源码"
@@ -44,6 +44,7 @@ import 'prismjs/themes/prism-tomorrow.min.css'
 import { CopyDocument, CaretTop } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
+import 'element-plus/theme-chalk/el-popper.css'
 
 const props = defineProps({
   componentName: {
@@ -58,13 +59,14 @@ const props = defineProps({
 })
 
 const isShowCode = ref(false)
+const copyBtn = ref()
 const iconColorArr = [{ color: '#fe5f57' }, { color: '#ffbc2d' }, { color: '#27c83e' }]
 let clipboard = null
 
 const handleToggleCode = () => isShowCode.value = !isShowCode.value
 
 const initCopy = () => {
-  clipboard = new ClipboardJS('.copy-btn')
+  clipboard = new ClipboardJS(copyBtn.value.$el)
   clipboard.on('success', (e) => {
     ElMessage.success('已复制！')
     e.clearSelection()

@@ -45,3 +45,9 @@ export default defineComponent({
   name: 'Basic2_1'
 })
 </script>
+
+<style scoped lang="scss">
+#ice-2_1 {
+  margin-top: 16px;
+}
+</style>
