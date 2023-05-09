@@ -1,3 +1,9 @@
+export const createGl = (id: string) => {
+  const canvas = document.querySelector(id)
+  const gl = canvas.getContext('webgl')
+  return gl
+}
+
 export const createShader = (gl, type, sourceCode) => {
   const shader = gl.createShader(type)
   gl.shaderSource(shader, sourceCode)

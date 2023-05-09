@@ -3,6 +3,7 @@
   "description": "示例程序",
   "author": "",
   "dependencies": {
-    "@ice-webgl/utils": "workspace:*"
+    "@ice-webgl/utils": "workspace:*",
+    "element-plus": "^2.3.4"
   }
 }

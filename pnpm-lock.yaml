@@ -41,8 +41,10 @@ importers:
   src/demo:
     specifiers:
       '@ice-webgl/utils': workspace:*
+      element-plus: ^2.3.4
     dependencies:
       '@ice-webgl/utils': link:../utils
+      element-plus: 2.3.4_vue@3.2.47
 
   src/utils:
     specifiers: {}

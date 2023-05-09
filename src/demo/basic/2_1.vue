@@ -1,0 +1,47 @@
+<template>
+  <el-button type="danger" @click="redFn">红色</el-button>
+  <el-button type="success" @click="greenFn">绿色</el-button>
+  <el-button type="primary" @click="blueFn">蓝色</el-button>
+  <el-button @click="blackFn">黑色</el-button>
+
+  <canvas id="ice-2_1" width="600" height="100"></canvas>
+</template>
+
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { createGl } from '@ice-webgl/utils'
+
+let gl
+
+const redFn = () => {
+  gl.clearColor(.9, 0., 0., .6)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+}
+
+const greenFn = () => {
+  gl.clearColor(0., .9, 0., .6)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+}
+
+const blueFn = () => {
+  gl.clearColor(0., 0., .9, .6)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+}
+
+const blackFn = () => {
+  gl.clearColor(0., 0., .0, .6)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+}
+
+onMounted(() => {
+  gl = createGl('#ice-2_1')
+})
+</script>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'Basic2_1'
+})
+</script>
