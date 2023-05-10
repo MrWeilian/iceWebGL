@@ -1,14 +1,9 @@
 <template>
-  <el-button @click="drawPoint">绘制</el-button>
-  <el-button @click="clear">清空</el-button>
-
   <canvas id="ice-2_2" width="600" height="100"></canvas>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-
-let gl
 
 const vertexCode = `
   void main () {
@@ -25,14 +20,6 @@ const fragmentCode = `
     gl_FragColor = vec4(0.0, 0.0, 0.9, 1.0);
   }
 `
-
-const drawPoint = () => {
-
-}
-
-const clear = ()=>  {
-
-}
 
 const initGl = () => {
   const canvas = document.querySelector('#ice-2_2')
@@ -51,6 +38,8 @@ const initGl = () => {
   gl.attachShader(program, fragmentShader);
   gl.linkProgram(program);
   gl.useProgram(program);
+
+  gl.drawArrays(gl.POINTS, 0, 1)
 }
 
 onMounted(() => {
@@ -65,9 +54,3 @@ export default defineComponent({
   name: 'Basic2_2'
 })
 </script>
-
-<style scoped lang="scss">
-#ice-2_1 {
-  margin-top: 16px;
-}
-</style>
