@@ -6,6 +6,9 @@ hero:
   name: "iceWebGl"
   text: "WebGl上车指南"
   tagline: 渐进式学习 WebGl
+  image:
+    src: /images/logo.png
+    alt: ice-webgl
   actions:
     - theme: brand
       text: 立即出发
