@@ -16,6 +16,17 @@ export default defineConfig({
         rel: 'icon',
         href: '/images/logo.png'
       }
+    ],
+    [
+      'script',
+      {},
+      `var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?a84e5bcfbdb6e96bed2d847adf7271da";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();`
     ]
   ],
   themeConfig: {
