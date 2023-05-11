@@ -22,6 +22,7 @@ export default defineConfig({
       {},
       `var _hmt = _hmt || [];
       (function() {
+        if (location.host.includes('localhost')) return;
         var hm = document.createElement("script");
         hm.src = "https://hm.baidu.com/hm.js?a84e5bcfbdb6e96bed2d847adf7271da";
         var s = document.getElementsByTagName("script")[0]; 

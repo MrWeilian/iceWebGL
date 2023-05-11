@@ -1,6 +1,6 @@
 export const createGl = (id: string) => {
   const canvas = document.querySelector(id)
-  const gl = canvas.getContext('webgl')
+  const gl = canvas.getContext('webgl', {preserveDrawingBuffer: true})
   return gl
 }
 
