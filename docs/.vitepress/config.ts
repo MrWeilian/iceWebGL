@@ -1,5 +1,9 @@
 import { defineConfig } from 'vitepress'
 import { sidebar, mdPlugin } from './configs'
+import fs from 'fs'
+import path from 'path'
+
+const vpRoot = path.resolve(__dirname, '../')
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({

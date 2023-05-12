@@ -1,12 +1,17 @@
 <template>
-  <el-button type="primary" @click="clear">清空画布</el-button>
-  <canvas id="ice-2_4" @click="drawFn" width="600" height="300"></canvas>
+  <el-row :gutter="8">
+    <el-col :span="6"><el-button type="primary" @click="clear">清空画布</el-button></el-col>
+    <el-col :span="6"><el-switch v-model="isClear" active-text="每次清空绘图区" /></el-col>
+  </el-row>
+  <canvas id="ice-2_4" @click="drawFn" width="600" height="200"></canvas>
 </template>
 
 <script setup lang="ts">
 import 'element-plus/theme-chalk/el-input-number.css'
 import { onMounted, ref } from 'vue'
 import { createGl, createShader, createProgram } from '@ice-webgl/utils'
+
+const isClear = ref(true)
 
 const vertexCode = `
   // 定义了一个名为 a_Position，类型为 vec4 的 attribute 变量
@@ -48,7 +53,8 @@ const drawFn = (e: MouseEvent) => {
   const halfH = canvas.height / 2
   const glX = parseFloat((e.offsetX - halfW ) / halfW + '')
   const glY = parseFloat((halfH - e.offsetY) / halfH + '')
-  gl.clear(gl.COLOR_BUFFER_BIT)
+
+  isClear.value && gl.clear(gl.COLOR_BUFFER_BIT)
 
   gl.vertexAttrib2f(a_Position, glX, glY)
   gl.drawArrays(gl.POINTS, 0, 1)

@@ -1,5 +1,6 @@
 import Theme from 'vitepress/theme'
 import '../../public/css/index.css'
+import 'element-plus/theme-chalk/dark/css-vars.css'
 import { globals } from '../components'
 import { App, Component } from 'vue'
 import DemoInstaller from '@ice-webgl/demo'
