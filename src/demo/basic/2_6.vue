@@ -7,15 +7,15 @@
       <el-switch v-model="isClear" active-text="每次清空绘图区" />
     </el-col>
   </el-row>
-  <canvas id="ice-2_4" @click="drawFn" width="600" height="200"></canvas>
+  <canvas id="ice-2_6" @click="drawFn" width="600" height="200"></canvas>
 </template>
 
 <script setup lang="ts">
 import 'element-plus/theme-chalk/el-input-number.css'
 import { onMounted, ref } from 'vue'
-import { createGl, createShader, createProgram } from '@ice-webgl/utils'
+import { createShader, createProgram } from '@ice-webgl/utils'
 
-const isClear = ref(true)
+const isClear = ref(false)
 
 const vertexCode = `
   // 定义了一个名为 a_Position，类型为 vec4 的 attribute 变量
@@ -30,16 +30,19 @@ const vertexCode = `
 `
 
 const fragmentCode = `
+  precision mediump float;
+  uniform vec4 u_FragColor;
+
   void main () {
-    // 顶点颜色——蓝色 (R, G, Bule, A)
-    gl_FragColor = vec4(0.0, 0.0, 0.9, 1.0);
+    gl_FragColor = u_FragColor;
   }
 `
 
-let gl, a_Position, canvas
+let gl, a_Position, canvas, u_FragColor
 
 const initGl = () => {
-  gl = createGl('#ice-2_4')
+  canvas = document.querySelector('#ice-2_6')
+  gl = canvas.getContext('webgl', { preserveDrawingBuffer: true })
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -47,6 +50,7 @@ const initGl = () => {
   const program = createProgram(gl, vertexShader, fragmentShader)
 
   a_Position = gl.getAttribLocation(program, 'a_Position')
+  u_FragColor = gl.getUniformLocation(program, 'u_FragColor')
 
   gl.clearColor(0., 0., 0., .9)
   gl.clear(gl.COLOR_BUFFER_BIT)
@@ -61,6 +65,7 @@ const drawFn = (e: MouseEvent) => {
   isClear.value && gl.clear(gl.COLOR_BUFFER_BIT)
 
   gl.vertexAttrib2f(a_Position, glX, glY)
+  gl.uniform4f(u_FragColor, Math.random(), Math.random(), Math.random(), .8)
   gl.drawArrays(gl.POINTS, 0, 1)
 }
 
@@ -70,7 +75,6 @@ const clear = () => {
 
 onMounted(() => {
   initGl()
-  canvas = document.querySelector('#ice-2_4')
 })
 </script>
 
@@ -78,12 +82,12 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Basic2_4'
+  name: 'Basic2_6'
 })
 </script>
 
 <style lang="scss">
-#ice-2_4 {
+#ice-2_6 {
   margin-top: 16px;
 }
 </style>

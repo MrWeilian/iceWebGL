@@ -1,7 +1,11 @@
 <template>
   <el-row :gutter="8">
-    <el-col :span="6"><el-button type="primary" @click="clear">清空画布</el-button></el-col>
-    <el-col :span="6"><el-switch v-model="isClear" active-text="每次清空绘图区" /></el-col>
+    <el-col :span="6">
+      <el-button type="primary" @click="clear">清空画布</el-button>
+    </el-col>
+    <el-col :span="6">
+      <el-switch v-model="isClear" active-text="每次清空绘图区" />
+    </el-col>
   </el-row>
   <canvas id="ice-2_5" @click="drawFn" width="600" height="200"></canvas>
 </template>
