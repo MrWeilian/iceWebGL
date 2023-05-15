@@ -1,7 +1,7 @@
 import * as path from 'path'
 import * as fsPromises from 'fs/promises'
 
-const contentBasePath = () => {
+export const contentBasePath = () => {
   return path.resolve(__dirname, '../content')
 }
 
