@@ -11,9 +11,14 @@ const getDirectory = async (): Promise<directoryTree[]> => {
 
   const dirArr = await fsPromises.readdir(resolvePath)
 
-  return Promise.all(dirArr.map(async (dirItemPath: string) => {
+  return Promise.all(dirArr.map(async (dirItemPath: string, dirIndex) => {
     const dirPath = `${resolvePath}/${dirItemPath}`
+    console.log(111, dirPath)
     const fileArr = await fsPromises.readdir(dirPath)
+    if (dirIndex === 0) {
+      // 目录文件不需要生成目录，直接删除
+      fileArr.splice(0, 1)
+    }
     const fileContentArr = []
     for (const file of fileArr) {
       const contentBuffer = await fsPromises.readFile(path.resolve(resolvePath, dirItemPath, file))
@@ -21,12 +26,18 @@ const getDirectory = async (): Promise<directoryTree[]> => {
       const firstTitleReg = /(?<=(#))\s.+(?=\n)/g
       const secondTitleReg = /(?<=(\n#{2}\s)).+?(?=\n)/g
 
-      const firstTitle = fileStr.match(firstTitleReg)?.[0]
+      const firstTitle = fileStr.match(firstTitleReg)?.[0].trim()
       const secondTitles = fileStr.match(secondTitleReg)
 
       firstTitle && fileContentArr.push({
-        title: firstTitle,
-        children: secondTitles?.map(_ => ({ title: _ }))
+        title: `[${firstTitle}](/content/${dirItemPath}/${encodeURIComponent(firstTitle)})`,
+        // 总结不生成目录
+        children: secondTitles
+          ?.filter(_ => !_.includes('总结'))
+          .map(_ => ({
+            // url hash 需要处理成小写字母；符号 ` 、 空格、需要转换成 -
+            title: `[${_}](/content/${dirItemPath}/${encodeURIComponent(firstTitle)}.html#${_.trim().toLowerCase().replaceAll('`', '').replaceAll(' ', '-')})`
+          }))
       })
     }
 
@@ -44,8 +55,8 @@ interface directoryTree {
 
 const treeTitle = (directoryTree: directoryTree[], deep = 0): string => {
   return directoryTree.reduce((acc, cur) => {
-    const TAB = new Array(deep).fill('#')
-    acc += deep > 0 ? [...TAB, `# ${cur.title}\n\n`].join('') : `# ${cur.title}\n\n`
+    const TAB = new Array(deep).fill('   ')
+    acc += deep > 0 ? [...TAB, `- ${cur.title}\n\n`].join('') : `## ${cur.title}\n\n`
     if (cur.children) {
       acc += treeTitle(cur.children, deep + 1)
     }
@@ -71,9 +82,9 @@ export default function createDirectory () {
 
       const everyTitleStr = treeTitle(directoryTree)
 
-      const directoryStr = `# 目录
-      ${everyTitleStr}
-      `
+      const directoryStr = `# 👉 目录大纲
+${everyTitleStr}
+`
       await fsPromises.writeFile(outPutFile, directoryStr, {
         encoding: 'utf-8'
       })

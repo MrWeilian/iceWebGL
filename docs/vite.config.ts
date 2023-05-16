@@ -6,7 +6,7 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 export default {
   plugins: [
     createSideBar(),
-    // createDirectory(),
+    createDirectory(),
     Components({
       resolvers: [ElementPlusResolver({ ssr: true })],
     })
