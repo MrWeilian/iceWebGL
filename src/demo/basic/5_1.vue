@@ -35,7 +35,7 @@ const initGl = () => {
 
   a_Position = gl.getAttribLocation(program, 'a_Position')
   const vertices = new Float32Array([
-      0., .5, -.5, -.5, .5, -.5
+      0., .8, -.6, -.6, .6, -.6
   ])
   const buffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
