@@ -7,15 +7,14 @@
       <el-switch v-model="isClear" active-text="每次清空绘图区" />
     </el-col>
   </el-row>
-  <canvas id="ice-2_4" @click="drawFn" width="600" height="200"></canvas>
+  <canvas id="ice-3_3" @click="drawFn" width="600" height="200"></canvas>
 </template>
 
 <script setup lang="ts">
-import 'element-plus/theme-chalk/el-input-number.css'
 import { onMounted, ref } from 'vue'
-import { createGl, createShader, createProgram } from '@ice-webgl/utils'
+import { createShader, createProgram } from '@ice-webgl/utils'
 
-const isClear = ref(true)
+const isClear = ref(false)
 
 const vertexCode = `
   // 定义了一个名为 a_Position，类型为 vec4 的 attribute 变量
@@ -39,7 +38,8 @@ const fragmentCode = `
 let gl, a_Position, canvas
 
 const initGl = () => {
-  gl = createGl('#ice-2_4')
+  canvas = document.querySelector('#ice-3_3')
+  gl = canvas.getContext('webgl', { preserveDrawingBuffer: true })
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -70,7 +70,6 @@ const clear = () => {
 
 onMounted(() => {
   initGl()
-  canvas = document.querySelector('#ice-2_4')
 })
 </script>
 
@@ -78,12 +77,12 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Basic2_4'
+  name: 'Basic3_3'
 })
 </script>
 
 <style lang="scss">
-#ice-2_4 {
+#ice-3_3 {
   margin-top: 16px;
 }
 </style>

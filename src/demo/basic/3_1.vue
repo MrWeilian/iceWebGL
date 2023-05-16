@@ -1,9 +1,8 @@
 <template>
-  <canvas id="ice-2_3" width="600" height="100"></canvas>
+  <canvas id="ice-3_1" width="600" height="100"></canvas>
 </template>
 
 <script setup lang="ts">
-import 'element-plus/theme-chalk/el-input-number.css'
 import { onMounted, ref } from 'vue'
 import { createGl, createShader, createProgram } from '@ice-webgl/utils'
 
@@ -27,7 +26,7 @@ const fragmentCode = `
 `
 
 const initGl = () => {
-  const gl = createGl('#ice-2_3')
+  const gl = createGl('#ice-3_1')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -49,6 +48,6 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Basic2_3'
+  name: 'Basic3_1'
 })
 </script>

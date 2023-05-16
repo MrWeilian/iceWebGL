@@ -7,11 +7,10 @@
       <el-switch v-model="isClear" active-text="每次清空绘图区" />
     </el-col>
   </el-row>
-  <canvas id="ice-2_7" @click="drawFn" width="600" height="200"></canvas>
+  <canvas id="ice-4_2" @click="drawFn" width="600" height="200"></canvas>
 </template>
 
 <script setup lang="ts">
-import 'element-plus/theme-chalk/el-input-number.css'
 import { onMounted, ref } from 'vue'
 import { createShader, createProgram } from '@ice-webgl/utils'
 
@@ -44,7 +43,7 @@ const fragmentCode = `
 let gl, a_Position, canvas, a_Color
 
 const initGl = () => {
-  canvas = document.querySelector('#ice-2_7')
+  canvas = document.querySelector('#ice-4_2')
   gl = canvas.getContext('webgl', { preserveDrawingBuffer: true })
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
@@ -85,12 +84,12 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Basic2_7'
+  name: 'Basic4_2'
 })
 </script>
 
 <style lang="scss">
-#ice-2_7 {
+#ice-4_2 {
   margin-top: 16px;
 }
 </style>

@@ -11,11 +11,11 @@ hero:
     alt: ice-webgl
   actions:
     - theme: brand
-      text: 立即出发
+      text: 立即学习 🏄🏻
       link: /content/二、WebGl基础/1. 初识WebGl
     - theme: alt
-      text: 导读
-      link: /content/一、前言/1. 导读
+      text: 查看目录 👀
+      link: /content/一、前言/0.%20目录.html
 
 features:
   - title: 🍭 渐进式
