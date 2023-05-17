@@ -1,7 +1,10 @@
 <template>
-  <el-button type="primary" @click="drawLine">线</el-button>
-  <el-button type="primary" @click="drawTriangle">三角</el-button>
-  <canvas id="ice-5_1" width="600" height="300"></canvas>
+  <div>
+    <el-button type="primary" @click="lines">gl.LINES</el-button>
+    <el-button type="primary" @click="lineStrip">gl.LINE_STRIP</el-button>
+    <el-button type="primary" @click="lineLoop">gl.LINE_LOOP</el-button>
+  </div>
+  <canvas id="ice-6_2" width="600" height="300"></canvas>
 </template>
 
 <script setup lang="ts">
@@ -25,7 +28,7 @@ const fragmentCode = `
 let gl, a_Position, canvas
 
 const initGl = () => {
-  gl = createGl('#ice-5_1')
+  gl = createGl('#ice-6_2')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -34,7 +37,9 @@ const initGl = () => {
 
   a_Position = gl.getAttribLocation(program, 'a_Position')
   const vertices = new Float32Array([
-      0., .8, -.6, -.6, .6, -.6
+    -.5, -.5, -.5, .5, // 每两个为一组，改变前后两组的顺序
+    0., -.5, 0., .5,  // 每两个为一组，改变前后两组的顺序
+    .5, -.5, .5, .5 // 每两个为一组，改变前后两组的顺序
   ])
   const buffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
@@ -44,18 +49,21 @@ const initGl = () => {
 
   gl.clearColor(0., 0., 0., .9)
   gl.clear(gl.COLOR_BUFFER_BIT)
-
-  gl.drawArrays(gl.LINE_STRIP, 0, 3)
 }
 
-const drawLine = () => {
+const lines = () => {
   gl.clear(gl.COLOR_BUFFER_BIT)
-  gl.drawArrays(gl.LINE_STRIP, 0, 3)
+  gl.drawArrays(gl.LINES, 0, 6)
 }
 
-const drawTriangle = () => {
+const lineStrip = () => {
   gl.clear(gl.COLOR_BUFFER_BIT)
-  gl.drawArrays(gl.TRIANGLES, 0, 3)
+  gl.drawArrays(gl.LINE_STRIP, 0, 6)
+}
+
+const lineLoop = () => {
+  gl.clear(gl.COLOR_BUFFER_BIT)
+  gl.drawArrays(gl.LINE_LOOP, 0, 6)
 }
 
 onMounted(() => {
@@ -67,12 +75,12 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Basic5_1'
+  name: 'Basic6_2'
 })
 </script>
 
 <style lang="scss" scoped>
-#ice-5_1 {
+#ice-6_2 {
   margin-top: 16px;
 }
 </style>
