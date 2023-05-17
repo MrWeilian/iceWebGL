@@ -6,8 +6,9 @@ WebGl 上车指南。
 
 这里是 [电子书](https://ice-webgl.netlify.app/) 在线文档地址。
 
+[目录大纲](https://ice-webgl.netlify.app/content/%E4%B8%80%E3%80%81%E5%89%8D%E8%A8%80/0.%20%E7%9B%AE%E5%BD%95.html)
+
 一、前言
-[目录](https://ice-webgl.netlify.app/content/%E4%B8%80%E3%80%81%E5%89%8D%E8%A8%80/0.%20%E7%9B%AE%E5%BD%95.html)
 1. [导读](https://ice-webgl.netlify.app/content/%E4%B8%80%E3%80%81%E5%89%8D%E8%A8%80/1.%20%E5%AF%BC%E8%AF%BB.html)
 
 二、WebGl基础
