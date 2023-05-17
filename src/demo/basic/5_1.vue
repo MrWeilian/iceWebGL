@@ -5,10 +5,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import { createGl, createShader, createProgram } from '@ice-webgl/utils'
-
-const isClear = ref(false)
 
 const vertexCode = `
   attribute vec4 a_Position;
