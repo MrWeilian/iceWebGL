@@ -1,10 +1,12 @@
 <template>
+  <el-button type="primary" @click="drawLine">线</el-button>
+  <el-button type="primary" @click="drawTriangle">三角</el-button>
   <canvas id="ice-5_1" width="600" height="300"></canvas>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { createShader, createProgram } from '@ice-webgl/utils'
+import { createGl, createShader, createProgram } from '@ice-webgl/utils'
 
 const isClear = ref(false)
 
@@ -22,11 +24,10 @@ const fragmentCode = `
   }
 `
 
-let gl, a_Position, canvas, a_Color
+let gl, a_Position, canvas
 
 const initGl = () => {
-  canvas = document.querySelector('#ice-5_1')
-  gl = canvas.getContext('webgl', { preserveDrawingBuffer: true })
+  gl = createGl('#ice-5_1')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -46,6 +47,16 @@ const initGl = () => {
   gl.clearColor(0., 0., 0., .9)
   gl.clear(gl.COLOR_BUFFER_BIT)
 
+  gl.drawArrays(gl.LINE_STRIP, 0, 3)
+}
+
+const drawLine = () => {
+  gl.clear(gl.COLOR_BUFFER_BIT)
+  gl.drawArrays(gl.LINE_STRIP, 0, 3)
+}
+
+const drawTriangle = () => {
+  gl.clear(gl.COLOR_BUFFER_BIT)
   gl.drawArrays(gl.TRIANGLES, 0, 3)
 }
 
@@ -61,3 +72,9 @@ export default defineComponent({
   name: 'Basic5_1'
 })
 </script>
+
+<style lang="scss" scoped>
+#ice-5_1 {
+  margin-top: 16px;
+}
+</style>
