@@ -2,11 +2,10 @@
 
 ![img.png](img.png)
 
-WebGl 上车指南。
+这里是 WebGl 零基础上车指南，专注 WebGl 领域，系统全面的学习 WebGl 知识。这里是 [线上电子书](https://ice-webgl.netlify.app/) 地址，文章内容会同步掘金社区发布。
 
-这里是 [电子书](https://ice-webgl.netlify.app/) 在线文档地址。
+戳👉 [目录大纲](https://ice-webgl.netlify.app/content/%E4%B8%80%E3%80%81%E5%89%8D%E8%A8%80/0.%20%E7%9B%AE%E5%BD%95.html) 快速了解各章节内容！
 
-[目录大纲](https://ice-webgl.netlify.app/content/%E4%B8%80%E3%80%81%E5%89%8D%E8%A8%80/0.%20%E7%9B%AE%E5%BD%95.html)
 
 一、前言
 1. [导读](https://ice-webgl.netlify.app/content/%E4%B8%80%E3%80%81%E5%89%8D%E8%A8%80/1.%20%E5%AF%BC%E8%AF%BB.html)
