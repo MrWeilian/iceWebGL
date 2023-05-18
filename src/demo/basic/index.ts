@@ -12,6 +12,7 @@ import Base5_1 from './5_1.vue'
 import Base6_1 from './6_1.vue'
 import Base6_2 from './6_2.vue'
 import Base6_3 from './6_3.vue'
+import Base6_4 from './6_4.vue'
 
 export const baseComponents = [
   Base1_1,
@@ -28,4 +29,5 @@ export const baseComponents = [
   Base6_1,
   Base6_2,
   Base6_3,
+  Base6_4,
 ]
