@@ -49,7 +49,7 @@ const initGl = () => {
 
   a_Position = gl.getAttribLocation(program, 'a_Position')
   a_Color = gl.getAttribLocation(program, 'a_Color')
-  const vertices = new Float32Array([
+  const verticesColors = new Float32Array([
     -.5, .5,  1., 0., 0., 1.,
     -.5, -.5, 1., 0., 0., 1.,
     0., .5, 0., 1., 0., 1.,
@@ -57,10 +57,10 @@ const initGl = () => {
     .5, .5, 0., 0., 1., 1.,
     .5, -.5, 0., 0., 1., 1.,
   ])
-  const FSIZE = vertices.BYTES_PER_ELEMENT
+  const FSIZE = verticesColors.BYTES_PER_ELEMENT
   const buffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
-  gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW)
+  gl.bufferData(gl.ARRAY_BUFFER, verticesColors, gl.STATIC_DRAW)
   gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, FSIZE * 6, 0)
   gl.vertexAttribPointer(a_Color, 4, gl.FLOAT, false, FSIZE * 6, FSIZE * 2)
   gl.enableVertexAttribArray(a_Position)
