@@ -51,6 +51,6 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Basic2_2'
+  name: 'Second2_2'
 })
 </script>

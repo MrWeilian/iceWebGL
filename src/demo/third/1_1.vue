@@ -1,10 +1,15 @@
 <template>
-  <canvas id="ice-6_4" width="600" height="300"></canvas>
+  <canvas id="ice-1_1" width="600" height="300"></canvas>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { createGl, createShader, createProgram } from '@ice-webgl/utils'
+import {
+  createGl,
+  createShader,
+  createProgram,
+  createBuffer
+} from '@ice-webgl/utils'
 
 const vertexCode = `
   attribute vec4 a_Position;
@@ -22,14 +27,14 @@ const fragmentCode = `
   varying vec4 v_Color;
 
   void main () {
-    gl_FragColor = vec4(0.0, 0.0, 1., .8);
+    gl_FragColor = v_Color;
   }
 `
 
 let gl, a_Position, canvas, a_Color
 
 const initGl = () => {
-  gl = createGl('#ice-6_4')
+  gl = createGl('#ice-1_1')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -39,20 +44,24 @@ const initGl = () => {
   a_Position = gl.getAttribLocation(program, 'a_Position')
   a_Color = gl.getAttribLocation(program, 'a_Color')
   const vertices = new Float32Array([
-    0., 0., -.5, .3,
-    -.3, .6, 0., .8,
-    .3, .6, .5, .3
+    -.6, -.6,
+    0., .8,
+    .6, -.6,
   ])
-  const FSIZE = vertices.BYTES_PER_ELEMENT
-  const buffer = gl.createBuffer()
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
-  gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW)
-  gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0)
-  gl.enableVertexAttribArray(a_Position)
+  const colors = new Float32Array([
+    1., 0., 0., 1.,
+    0., 1., 0., 1.,
+    0., 0., 1., 1.,
+  ])
+
+  // 顶点坐标
+  createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Position, 2)
+  // 颜色值
+  createBuffer(gl, gl.ARRAY_BUFFER, colors, a_Color, 4)
 
   gl.clearColor(0., 0., 0., .9)
   gl.clear(gl.COLOR_BUFFER_BIT)
-  gl.drawArrays(gl.TRIANGLE_FAN, 0, 6)
+  gl.drawArrays(gl.TRIANGLES, 0, 3)
 }
 
 onMounted(() => {
@@ -64,6 +73,6 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Basic6_4'
+  name: 'Third1_1'
 })
 </script>

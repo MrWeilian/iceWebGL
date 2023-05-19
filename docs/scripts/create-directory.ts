@@ -1,6 +1,6 @@
 import * as path from 'path'
 import * as fsPromises from 'fs/promises'
-import { contentBasePath } from './create-side-bar';
+import { chineseSortFn, contentBasePath } from './create-side-bar';
 
 const outPutBasePath = () => {
   return path.resolve(contentBasePath(), './一、前言')
@@ -11,9 +11,11 @@ const getDirectory = async (): Promise<directoryTree[]> => {
 
   const dirArr = await fsPromises.readdir(resolvePath)
 
-  return Promise.all(dirArr.map(async (dirItemPath: string, dirIndex) => {
+  return Promise.all(dirArr
+    .sort(chineseSortFn)
+    .map(async (dirItemPath: string, dirIndex) => {
     const dirPath = `${resolvePath}/${dirItemPath}`
-    console.log(111, dirPath)
+
     const fileArr = await fsPromises.readdir(dirPath)
     if (dirIndex === 0) {
       // 目录文件不需要生成目录，直接删除
@@ -77,8 +79,6 @@ export default function createDirectory () {
       //
       // }
       const directoryTree = await getDirectory()
-
-      console.log('directoryTree', directoryTree);
 
       const everyTitleStr = treeTitle(directoryTree)
 

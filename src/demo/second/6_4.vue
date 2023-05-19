@@ -1,10 +1,5 @@
 <template>
-  <div>
-    <el-button type="primary" @click="lines">gl.LINES</el-button>
-    <el-button type="primary" @click="lineStrip">gl.LINE_STRIP</el-button>
-    <el-button type="primary" @click="lineLoop">gl.LINE_LOOP</el-button>
-  </div>
-  <canvas id="ice-6_1" width="600" height="300"></canvas>
+  <canvas id="ice-6_4" width="600" height="300"></canvas>
 </template>
 
 <script setup lang="ts">
@@ -20,6 +15,8 @@ const vertexCode = `
 `
 
 const fragmentCode = `
+  precision mediump float;
+
   void main () {
     gl_FragColor = vec4(0.0, 0.0, 1., .8);
   }
@@ -28,7 +25,7 @@ const fragmentCode = `
 let gl, a_Position, canvas
 
 const initGl = () => {
-  gl = createGl('#ice-6_1')
+  gl = createGl('#ice-6_4')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -36,11 +33,13 @@ const initGl = () => {
   const program = createProgram(gl, vertexShader, fragmentShader)
 
   a_Position = gl.getAttribLocation(program, 'a_Position')
+
   const vertices = new Float32Array([
-      -.5, .5, -.5, -.5,
-      0., .5, 0., -.5,
-      .5, .5, .5, -.5
+    0., 0., -.5, .3,
+    -.3, .6, 0., .8,
+    .3, .6, .5, .3
   ])
+
   const buffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
   gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW)
@@ -49,21 +48,7 @@ const initGl = () => {
 
   gl.clearColor(0., 0., 0., .9)
   gl.clear(gl.COLOR_BUFFER_BIT)
-}
-
-const lines = () => {
-  gl.clear(gl.COLOR_BUFFER_BIT)
-  gl.drawArrays(gl.LINES, 0, 6)
-}
-
-const lineStrip = () => {
-  gl.clear(gl.COLOR_BUFFER_BIT)
-  gl.drawArrays(gl.LINE_STRIP, 0, 6)
-}
-
-const lineLoop = () => {
-  gl.clear(gl.COLOR_BUFFER_BIT)
-  gl.drawArrays(gl.LINE_LOOP, 0, 6)
+  gl.drawArrays(gl.TRIANGLE_FAN, 0, 6)
 }
 
 onMounted(() => {
@@ -75,12 +60,6 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Basic6_1'
+  name: 'Second6_4'
 })
 </script>
-
-<style lang="scss" scoped>
-#ice-6_1 {
-  margin-top: 16px;
-}
-</style>

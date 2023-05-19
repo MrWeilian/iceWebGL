@@ -7,7 +7,7 @@
       <el-switch v-model="isClear" active-text="每次清空绘图区" />
     </el-col>
   </el-row>
-  <canvas id="ice-3_3" @click="drawFn" width="600" height="200"></canvas>
+  <canvas id="ice-4_1" @click="drawFn" width="600" height="200"></canvas>
 </template>
 
 <script setup lang="ts">
@@ -29,16 +29,18 @@ const vertexCode = `
 `
 
 const fragmentCode = `
+  precision mediump float;
+  uniform vec4 u_FragColor;
+
   void main () {
-    // 顶点颜色——蓝色 (R, G, Bule, A)
-    gl_FragColor = vec4(0.0, 0.0, 0.9, 1.0);
+    gl_FragColor = u_FragColor;
   }
 `
 
-let gl, a_Position, canvas
+let gl, a_Position, canvas, u_FragColor
 
 const initGl = () => {
-  canvas = document.querySelector('#ice-3_3')
+  canvas = document.querySelector('#ice-4_1')
   gl = canvas.getContext('webgl', { preserveDrawingBuffer: true })
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
@@ -47,6 +49,7 @@ const initGl = () => {
   const program = createProgram(gl, vertexShader, fragmentShader)
 
   a_Position = gl.getAttribLocation(program, 'a_Position')
+  u_FragColor = gl.getUniformLocation(program, 'u_FragColor')
 
   gl.clearColor(0., 0., 0., .9)
   gl.clear(gl.COLOR_BUFFER_BIT)
@@ -61,6 +64,7 @@ const drawFn = (e: MouseEvent) => {
   isClear.value && gl.clear(gl.COLOR_BUFFER_BIT)
 
   gl.vertexAttrib2f(a_Position, glX, glY)
+  gl.uniform4f(u_FragColor, Math.random(), Math.random(), Math.random(), .8)
   gl.drawArrays(gl.POINTS, 0, 1)
 }
 
@@ -77,12 +81,12 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Basic3_3'
+  name: 'Second4_1'
 })
 </script>
 
 <style lang="scss">
-#ice-3_3 {
+#ice-4_1 {
   margin-top: 16px;
 }
 </style>

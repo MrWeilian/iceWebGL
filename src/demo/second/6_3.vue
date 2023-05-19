@@ -1,8 +1,14 @@
 <template>
   <div>
-    <el-button type="primary" @click="triangles">gl.TRIANGLES</el-button>
-    <el-button type="primary" @click="triangleStrip">gl.TRIANGLE_STRIP</el-button>
-    <el-button type="primary" @click="triangleFan">gl.TRIANGLE_FAN</el-button>
+    <el-button type="primary" @click="triangles">
+      gl.TRIANGLES
+    </el-button>
+    <el-button type="primary" @click="triangleStrip">
+      gl.TRIANGLE_STRIP
+    </el-button>
+    <el-button type="primary" @click="triangleFan">
+      gl.TRIANGLE_FAN
+    </el-button>
   </div>
   <canvas id="ice-6_3" width="600" height="300"></canvas>
 </template>
@@ -46,8 +52,8 @@ const initGl = () => {
   const vertices = new Float32Array([
     -.5, .5,  1., 0., 0., 1.,
     -.5, -.5, 1., 0., 0., 1.,
-    0., .5,  0., 1., 0., 1.,
-    0., -.5,   0., 1., 0., 1.,
+    0., .5, 0., 1., 0., 1.,
+    0., -.5, 0., 1., 0., 1.,
     .5, .5, 0., 0., 1., 1.,
     .5, -.5, 0., 0., 1., 1.,
   ])
@@ -88,7 +94,7 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Basic6_3'
+  name: 'Second6_3'
 })
 </script>
 

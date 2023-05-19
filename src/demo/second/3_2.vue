@@ -7,44 +7,38 @@
       <el-switch v-model="isClear" active-text="每次清空绘图区" />
     </el-col>
   </el-row>
-  <canvas id="ice-4_2" @click="drawFn" width="600" height="200"></canvas>
+  <canvas id="ice-3_2" @click="drawFn" width="600" height="200"></canvas>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { createShader, createProgram } from '@ice-webgl/utils'
+import { createGl, createShader, createProgram } from '@ice-webgl/utils'
 
-const isClear = ref(false)
+const isClear = ref(true)
 
 const vertexCode = `
+  // 定义了一个名为 a_Position，类型为 vec4 的 attribute 变量
   attribute vec4 a_Position;
-  // 定义 a_Color 动态接受值
-  attribute vec4 a_Color;
-  // 定义 v_Color 接收、传递颜色值（跟片元着色器一致）
-  varying vec4 v_Color;
 
   void main () {
+    // 将变量赋值给顶点坐标
     gl_Position = a_Position;
+    // 顶点渲染像素大小
     gl_PointSize = 24.0;
-    v_Color = a_Color;
   }
 `
 
 const fragmentCode = `
-  precision mediump float;
-  // 定义 v_Color，注意类型、变量名跟顶点着色器的一致，用于接收变量
-  varying vec4 v_Color;
-
   void main () {
-    gl_FragColor = v_Color;
+    // 顶点颜色——蓝色 (R, G, Bule, A)
+    gl_FragColor = vec4(0.0, 0.0, 0.9, 1.0);
   }
 `
 
-let gl, a_Position, canvas, a_Color
+let gl, a_Position, canvas
 
 const initGl = () => {
-  canvas = document.querySelector('#ice-4_2')
-  gl = canvas.getContext('webgl', { preserveDrawingBuffer: true })
+  gl = createGl('#ice-3_2')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -52,7 +46,6 @@ const initGl = () => {
   const program = createProgram(gl, vertexShader, fragmentShader)
 
   a_Position = gl.getAttribLocation(program, 'a_Position')
-  a_Color = gl.getAttribLocation(program, 'a_Color')
 
   gl.clearColor(0., 0., 0., .9)
   gl.clear(gl.COLOR_BUFFER_BIT)
@@ -67,7 +60,6 @@ const drawFn = (e: MouseEvent) => {
   isClear.value && gl.clear(gl.COLOR_BUFFER_BIT)
 
   gl.vertexAttrib2f(a_Position, glX, glY)
-  gl.vertexAttrib4f(a_Color, Math.random(), Math.random(), Math.random(), .8)
   gl.drawArrays(gl.POINTS, 0, 1)
 }
 
@@ -77,6 +69,7 @@ const clear = () => {
 
 onMounted(() => {
   initGl()
+  canvas = document.querySelector('#ice-3_2')
 })
 </script>
 
@@ -84,12 +77,12 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Basic4_2'
+  name: 'Second3_2'
 })
 </script>
 
 <style lang="scss">
-#ice-4_2 {
+#ice-2_4 {
   margin-top: 16px;
 }
 </style>

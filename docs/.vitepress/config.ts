@@ -47,8 +47,8 @@ export default defineConfig({
     ],
 
     footer: {
-      message: '',
-      copyright: 'Copyright © 2023-present 井柏然'
+      message: '未经允许不得随意转载',
+      copyright: 'Copyright © 2023-present  <a href="https://github.com/MrWeilian/iceWebGl">井柏然</a>'
     }
   }
 })
