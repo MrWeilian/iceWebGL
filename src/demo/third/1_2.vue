@@ -1,5 +1,5 @@
 <template>
-  <canvas id="ice-1_1" width="600" height="300"></canvas>
+  <canvas id="ice-1_2" width="600" height="300"></canvas>
 </template>
 
 <script setup lang="ts">
@@ -34,7 +34,7 @@ const fragmentCode = `
 let gl, a_Position, canvas, a_Color
 
 const initGl = () => {
-  gl = createGl('#ice-1_1')
+  gl = createGl('#ice-1_2')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -43,21 +43,23 @@ const initGl = () => {
 
   a_Position = gl.getAttribLocation(program, 'a_Position')
   a_Color = gl.getAttribLocation(program, 'a_Color')
-  const vertices = new Float32Array([
-    -.6, -.6,
-    0., .8,
-    .6, -.6,
-  ])
-  const colors = new Float32Array([
-    1., 0., 0., 1.,
-    0., 1., 0., 1.,
-    0., 0., 1., 1.,
+
+  const verticesColors = new Float32Array([
+    -.6, -.6, 1., 0., 0., 1.,
+    0., .8, 0., 1., 0., 1.,
+    .6, -.6, 0., 0., 1., 1.,
   ])
 
-  // 顶点坐标
-  createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Position, 2)
-  // 颜色值
-  createBuffer(gl, gl.ARRAY_BUFFER, colors, a_Color, 4)
+  const FSIZE = verticesColors.BYTES_PER_ELEMENT
+
+  const buffer = gl.createBuffer()
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+  gl.bufferData(gl.ARRAY_BUFFER, verticesColors, gl.STATIC_DRAW)
+  gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, FSIZE * 6, 0)
+  gl.enableVertexAttribArray(a_Position)
+
+  gl.vertexAttribPointer(a_Color, 4, gl.FLOAT, false, FSIZE * 6, FSIZE * 2)
+  gl.enableVertexAttribArray(a_Color)
 
   gl.clearColor(0., 0., 0., .9)
   gl.clear(gl.COLOR_BUFFER_BIT)
@@ -73,6 +75,6 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Third1_1'
+  name: 'Third1_2'
 })
 </script>
