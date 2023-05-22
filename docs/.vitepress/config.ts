@@ -7,7 +7,7 @@ const vpRoot = path.resolve(__dirname, '../')
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: 'WebGl电子书——iceWebGl',
+  title: 'iceWebGl',
   description: 'iceWebGl是WebGl零基础、系统性的学习指南电子书。WebGl上车指南；零基础学习WebGL；渐进式学习WebGl；系统化全面学习WebGl。',
   lastUpdated: true,
   markdown: {
