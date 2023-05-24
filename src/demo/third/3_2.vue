@@ -1,5 +1,6 @@
 <template>
-  <canvas id="ice-3_1" width="600" height="150"></canvas>
+  <canvas id="ice-3_2_a" width="600" height="150"></canvas>
+  <canvas id="ice-3_2_b" width="600" height="150"></canvas>
 </template>
 
 <script setup lang="ts">
@@ -31,22 +32,43 @@ const fragmentCode = `
   }
 `
 
-let gl, a_Position, canvas, a_Color
+const fragmentGradientCode = `
+  precision mediump float;
+  varying vec4 v_Color;
+
+  void main () {
+    float tanARadian = atan(120., 180.);
+    float vertexY = gl_FragCoord.x * tan(tanARadian) - gl_FragCoord.y;
+    gl_FragColor = mix(
+    vec4(0., 0., 0., .9),
+    v_Color, smoothstep(.1, 2.4, vertexY)
+    );
+  }
+`
 
 const initGl = () => {
-  gl = createGl('#ice-3_1')
+  const glA = createGl('#ice-3_2_a')
+  const glB = createGl('#ice-3_2_b')
 
-  const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
-  const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
+  const vertexShader = createShader(glA, glA.VERTEX_SHADER, vertexCode)
+  const fragmentShader = createShader(glA, glA.FRAGMENT_SHADER, fragmentCode)
 
-  draw(gl, vertexShader, fragmentShader)
+  const vertexBShader = createShader(glB, glB.VERTEX_SHADER, vertexCode)
+  const fragmentGradientShader = createShader(
+      glB,
+      glB.FRAGMENT_SHADER,
+      fragmentGradientCode
+  )
+
+  draw(glA, vertexShader, fragmentShader)
+  draw(glB, vertexBShader, fragmentGradientShader)
 }
 
 const draw = (gl, vertexShader, fragmentShader) => {
   const program = createProgram(gl, vertexShader, fragmentShader)
 
-  a_Position = gl.getAttribLocation(program, 'a_Position')
-  a_Color = gl.getAttribLocation(program, 'a_Color')
+  const a_Position = gl.getAttribLocation(program, 'a_Position')
+  const a_Color = gl.getAttribLocation(program, 'a_Color')
 
   const verticesColors = new Float32Array([
     -1., -1., 1., 1., 0., 1.,
@@ -79,6 +101,6 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Third3_1'
+  name: 'Third3_2'
 })
 </script>
