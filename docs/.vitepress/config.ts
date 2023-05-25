@@ -7,8 +7,8 @@ const vpRoot = path.resolve(__dirname, '../')
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: 'iceWebGl',
-  description: 'iceWebGl是WebGl零基础、系统性的学习指南电子书。WebGl上车指南；零基础学习WebGL；渐进式学习WebGl；系统化全面学习WebGl。',
+  title: 'iceWebGL',
+  description: 'iceWebGL是WebGL零基础、系统性的学习指南电子书。WebGL上车指南；零基础学习WebGL；渐进式学习WebGL；系统化全面学习WebGL。',
   lastUpdated: true,
   markdown: {
     config: (md) => mdPlugin(md)
@@ -43,12 +43,12 @@ export default defineConfig({
     sidebar,
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/MrWeilian/iWebGl' }
+      { icon: 'github', link: 'https://github.com/MrWeilian/iceWebGL' }
     ],
 
     footer: {
       message: '未经允许不得随意转载',
-      copyright: 'Copyright © 2023-present  <a href="https://github.com/MrWeilian/iceWebGl">井柏然</a>'
+      copyright: 'Copyright © 2023-present  <a href="https://github.com/MrWeilian/iceWebGL">井柏然</a>'
     }
   }
 })

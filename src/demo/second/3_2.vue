@@ -82,7 +82,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-#ice-2_4 {
+#ice-3_2 {
   margin-top: 16px;
 }
 </style>
