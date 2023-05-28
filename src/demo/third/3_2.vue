@@ -19,7 +19,7 @@ const vertexCode = `
 
   void main () {
     gl_Position = a_Position;
-    v_Color= a_Color;
+    v_Color = a_Color;
   }
 `
 
