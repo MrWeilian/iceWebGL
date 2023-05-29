@@ -1,5 +1,5 @@
 <template>
-  <canvas id="ice-4_1" width="640" height="400"></canvas>
+  <canvas id="ice-4_2" width="640" height="400"></canvas>
 </template>
 
 <script setup lang="ts">
@@ -8,6 +8,7 @@ import {
   createGl,
   createShader,
   createProgram,
+  createBuffer
 } from '@ice-webgl/utils'
 
 const vertexCode = `
@@ -34,7 +35,7 @@ const fragmentCode = `
 let gl, program, a_Position, canvas, img
 
 const initGl = () => {
-  gl = createGl('#ice-4_1')
+  gl = createGl('#ice-4_2')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -62,6 +63,7 @@ const initGl = () => {
   gl.clearColor(0., 0., 0., .9)
 
   drawModel()
+  drawPicture()
 }
 
 const drawModel = () => {
@@ -70,8 +72,37 @@ const drawModel = () => {
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
 }
 
+const drawPicture = () => {
+  const texture = gl.createTexture()
+
+  gl.activeTexture(gl.TEXTURE0)
+
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1)
+  gl.bindTexture(gl.TEXTURE_2D, texture)
+
+
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img)
+
+  const u_Sampler = gl.getUniformLocation(program, 'u_Sampler')
+  gl.uniform1i(u_Sampler, 0)
+
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
+}
+
+const initImage = () => {
+  img = new Image()
+  img.src = '/public/images/third/4.1.jpeg'
+  img.onload = function () {
+    initGl()
+  }
+}
+
 onMounted(() => {
-  initGl()
+  initImage()
 })
 </script>
 
@@ -79,6 +110,6 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Third4_1'
+  name: 'Third4_2'
 })
 </script>
