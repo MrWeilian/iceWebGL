@@ -1,5 +1,8 @@
 <template>
-  <canvas id="ice-4_1" width="600" height="300"></canvas>
+  <div>
+    <el-button type="primary" @click="drawModel">绘制长方形</el-button>
+  </div>
+  <canvas id="ice-4_1" width="640" height="400"></canvas>
 </template>
 
 <script setup lang="ts">
@@ -32,14 +35,14 @@ const fragmentCode = `
   }
 `
 
-let gl, a_Position, canvas, a_Color
+let gl, program, a_Position, canvas, img
 
-const initGl = (img) => {
+const initGl = () => {
   gl = createGl('#ice-4_1')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
-  const program = createProgram(gl, vertexShader, fragmentShader)
+  program = createProgram(gl, vertexShader, fragmentShader)
 
   const verticesTexCoords = new Float32Array([
       -.5, .5, 0., 1.,
@@ -61,21 +64,32 @@ const initGl = (img) => {
   gl.enableVertexAttribArray(a_TexCoord)
 
   gl.clearColor(0., 0., 0., .9)
+
+  drawModel()
+  drawPicture()
+}
+
+const drawModel = () => {
   gl.clear(gl.COLOR_BUFFER_BIT)
 
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
+}
+
+const drawPicture = () => {
   const texture = gl.createTexture()
 
   const u_Sampler = gl.getUniformLocation(program, 'u_Sampler')
 
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1)
-  gl.activeTexture(gl.TEXTURE0)
-  gl.bindTexture(gl.TEXTURE_2D, texture)
-  // gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
 
+  gl.bindTexture(gl.TEXTURE_2D, texture)
+
+  // gl.activeTexture(gl.TEXTURE0)
+
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img)
 
@@ -84,13 +98,12 @@ const initGl = (img) => {
 }
 
 const initImage = () => {
-  const img = new Image()
+  img = new Image()
   img.src = '/public/images/third/4.1.jpeg'
   img.onload = function () {
-    initGl(img)
+    initGl()
   }
 }
-
 
 onMounted(() => {
   initImage()
@@ -104,3 +117,9 @@ export default defineComponent({
   name: 'Third4_1'
 })
 </script>
+
+<style scoped lang="scss">
+#ice-4_1 {
+  margin-top:  16px;
+}
+</style>
