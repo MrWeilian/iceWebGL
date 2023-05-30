@@ -11,6 +11,7 @@ import {
   createShader,
   createProgram,
 } from '@ice-webgl/utils'
+import imageUrl from '/public/images/third/4.1.jpeg'
 
 const isY = ref(false)
 
@@ -91,7 +92,7 @@ const drawPicture = () => {
 
 const initImage = () => {
   img = new Image()
-  img.src = '/public/images/third/4.1.jpeg'
+  img.src = imageUrl
   img.onload = function () {
     initGl()
   }
