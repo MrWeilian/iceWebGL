@@ -27,7 +27,7 @@ const fragmentCode = `
   uniform sampler2D u_Sampler;
 
   void main () {
-    gl_FragColor = texture2D(u_Sampler, v_TexCoord);
+    gl_FragColor = vec4(0., 0., 0., 1.);
   }
 `
 
@@ -60,11 +60,6 @@ const initGl = () => {
   gl.enableVertexAttribArray(a_TexCoord)
 
   gl.clearColor(0., 0., 0., .9)
-
-  drawModel()
-}
-
-const drawModel = () => {
   gl.clear(gl.COLOR_BUFFER_BIT)
 
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
