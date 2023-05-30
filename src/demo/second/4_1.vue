@@ -85,7 +85,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #ice-4_1 {
   margin-top: 16px;
 }
