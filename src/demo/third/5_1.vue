@@ -1,5 +1,16 @@
 <template>
-  <canvas id="ice-5_1" width="400" height="240"></canvas>
+  <div class="wrapper">
+    <canvas id="ice-5_1" width="400" height="200"></canvas>
+
+    <el-form class="options-group">
+      <el-form-item label="调整尺寸">
+        <el-slider v-model="size" :format-tooltip="format" />
+      </el-form-item>
+      <el-form-item label="调整尺寸">
+        <el-slider v-model="size" :format-tooltip="format" />
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -9,7 +20,11 @@ import {
   createShader,
   createProgram,
 } from '@ice-webgl/utils'
-import imageUrl from '/public/images/third/4.1.jpeg'
+import imageUrl from '/public/images/third/4.1_1024x512.jpeg'
+
+const size = ref(0)
+
+const format = (val) => parseFloat((val / 50).toString())
 
 const vertexCode = `
   attribute vec4 a_Position;
@@ -42,10 +57,10 @@ const initGl = () => {
   program = createProgram(gl, vertexShader, fragmentShader)
 
   const verticesTexCoords = new Float32Array([
-      -1., 1., 0.0, .5,
+      -1., 1., 0., format(size.value),
       -1., -1., 0., 0.,
-      1., 1., .5, .5,
-      1.,-1., .5, 0.
+      1., 1., format(size.value), format(size.value),
+      1.,-1., format(size.value), 0.
   ])
   const FSIZE = verticesTexCoords.BYTES_PER_ELEMENT
 
@@ -74,8 +89,8 @@ const drawPicture = () => {
   gl.bindTexture(gl.TEXTURE_2D, texture)
 
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+  // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+  // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
 
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img)
 
@@ -94,6 +109,10 @@ const initImage = () => {
   }
 }
 
+watch(size, (size) => {
+  initGl()
+})
+
 onMounted(() => {
   initImage()
 })
@@ -110,5 +129,17 @@ export default defineComponent({
 <style lang="scss" scoped>
 #ice-5_1 {
   margin-top: 16px;
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  .options-group {
+    padding: 0 8px 0 16px;
+    flex: 1;
+    box-sizing: border-box;
+  }
 }
 </style>
