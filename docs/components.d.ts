@@ -15,6 +15,8 @@ declare module '@vue/runtime-core' {
     ElForm: typeof import('element-plus/lib')['ElForm']
     ElFormItem: typeof import('element-plus/lib')['ElFormItem']
     ElIcon: typeof import('element-plus/lib')['ElIcon']
+    ElRadio: typeof import('element-plus/lib')['ElRadio']
+    ElRadioGroup: typeof import('element-plus/lib')['ElRadioGroup']
     ElRow: typeof import('element-plus/lib')['ElRow']
     ElSlider: typeof import('element-plus/lib')['ElSlider']
     ElSwitch: typeof import('element-plus/lib')['ElSwitch']

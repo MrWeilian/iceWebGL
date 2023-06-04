@@ -1,14 +1,16 @@
 <template>
   <div class="wrapper">
-<!--    <canvas id="ice-5_1" width="4096" height="2048"></canvas>-->
-    <canvas id="ice-5_1" width="400" height="200"></canvas>
+    <canvas id="ice-5_1" width="500" height="463"></canvas>
 
-    <el-form class="options-group">
-      <el-form-item label="调整尺寸">
-        <el-slider v-model="size" :format-tooltip="format" />
+    <el-form class="options-group" size="small" label-position="top">
+      <el-form-item label="TEXTURE_MAG_FILTER 参数配置：">
+        <el-radio-group v-model="filterType" @change="filterChange">
+          <el-radio label="NEAREST"></el-radio>
+          <el-radio label="LINEAR"></el-radio>
+        </el-radio-group>
       </el-form-item>
-      <el-form-item label="调整尺寸">
-        <el-slider v-model="size" :format-tooltip="format" />
+      <el-form-item label="图像缩放：">
+        <el-slider size="small" v-model="size" :format-tooltip="format" />
       </el-form-item>
     </el-form>
   </div>
@@ -21,9 +23,11 @@ import {
   createShader,
   createProgram,
 } from '@ice-webgl/utils'
-import imageUrl from '/public/images/third/4.1.jpeg'
+import imageUrl from '/public/images/third/5.3.jpeg'
 
-const size = ref(0)
+const size = ref(50)
+const filterType = ref('NEAREST')
+const maxSize = 100
 
 const format = (val) => parseFloat((val / 50).toString())
 
@@ -58,14 +62,10 @@ const initGl = () => {
   program = createProgram(gl, vertexShader, fragmentShader)
 
   const verticesTexCoords = new Float32Array([
-    // -1., 1., 0., 1.,
-    // -1., -1., 0., 0.,
-    // 1., 1., 1., 1.,
-    // 1.,-1., 1., 0.
-      -1., 1., 0., format(size.value),
+      -1., 1., 0., format(maxSize - size.value),
       -1., -1., 0., 0.,
-      1., 1., format(size.value), format(size.value),
-      1.,-1., format(size.value), 0.
+      1., 1., format(maxSize - size.value), format(maxSize - size.value),
+      1.,-1., format(maxSize - size.value), 0.
   ])
   const FSIZE = verticesTexCoords.BYTES_PER_ELEMENT
 
@@ -93,8 +93,8 @@ const drawPicture = () => {
   gl.activeTexture(gl.TEXTURE0)
   gl.bindTexture(gl.TEXTURE_2D, texture)
 
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl[filterType.value])
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
 
@@ -115,7 +115,13 @@ const initImage = () => {
   }
 }
 
+const filterChange = (val) => {
+  console.log('filter type', val);
+  drawPicture()
+}
+
 watch(size, (size) => {
+  console.log(size);
   initGl()
 })
 
@@ -133,10 +139,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-#ice-5_1 {
-  margin-top: 16px;
-}
-
 .wrapper {
   display: flex;
   flex-wrap: nowrap;
