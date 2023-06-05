@@ -23,3 +23,5 @@
 1. [绘制彩色的三角](https://ice-webgl.netlify.app/content/%E4%B8%89%E3%80%81WebGL%E9%A2%9C%E8%89%B2%E5%92%8C%E7%BA%B9%E7%90%86/1.%20%E7%BB%98%E5%88%B6%E5%BD%A9%E8%89%B2%E7%9A%84%E4%B8%89%E8%A7%92.html)
 2. [为什么会出现颜色渐变](https://ice-webgl.netlify.app/content/%E4%B8%89%E3%80%81WebGL%E9%A2%9C%E8%89%B2%E5%92%8C%E7%BA%B9%E7%90%86/2.%20%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%87%BA%E7%8E%B0%E9%A2%9C%E8%89%B2%E6%B8%90%E5%8F%98.html)
 3. [实战消除锯齿](https://ice-webgl.netlify.app/content/%E4%B8%89%E3%80%81WebGL%E9%A2%9C%E8%89%B2%E5%92%8C%E7%BA%B9%E7%90%86/3.%20%E5%AE%9E%E6%88%98%E6%B6%88%E9%99%A4%E9%94%AF%E9%BD%BF.html)
+4. [初探纹理图像](https://ice-webgl.netlify.app/content/%E4%B8%89%E3%80%81WebGL%E9%A2%9C%E8%89%B2%E5%92%8C%E7%BA%B9%E7%90%86/4.%20%E5%88%9D%E6%8E%A2%E7%BA%B9%E7%90%86%E5%9B%BE%E5%83%8F.html)
+5. [深入纹理细节之FILTER](https://ice-webgl.netlify.app/content/%E4%B8%89%E3%80%81WebGL%E9%A2%9C%E8%89%B2%E5%92%8C%E7%BA%B9%E7%90%86/5.%20%E6%B7%B1%E5%85%A5%E7%BA%B9%E7%90%86%E7%BB%86%E8%8A%82%E4%B9%8BFILTER.html)
