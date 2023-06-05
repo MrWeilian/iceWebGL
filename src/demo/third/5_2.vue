@@ -1,19 +1,16 @@
 <template>
   <div class="wrapper">
-    <canvas id="ice-5_1" width="512" height="512"></canvas>
+    <canvas id="ice-5_2" width="512" height="512"></canvas>
 
     <el-form class="options-group" size="small" label-position="top">
-      <el-form-item label="TEXTURE_MIN_FILTER 参数配置：">
-        <el-radio-group v-model="minFilterType" @change="filterChange">
-          <el-radio label="NEAREST"></el-radio>
-          <el-radio label="LINEAR"></el-radio>
-        </el-radio-group>
-      </el-form-item>
       <el-form-item label="TEXTURE_MAG_FILTER 参数配置：">
         <el-radio-group v-model="magFilterType" @change="filterChange">
           <el-radio label="NEAREST"></el-radio>
           <el-radio label="LINEAR"></el-radio>
         </el-radio-group>
+      </el-form-item>
+      <el-form-item label="是否调用 gl.generateMipmap：">
+        <el-switch v-model="isGenerateMipmap" @change="filterChange" />
       </el-form-item>
       <el-form-item label="图像缩放：">
         <el-slider size="small" v-model="size" :format-tooltip="format" />
@@ -32,8 +29,8 @@ import {
 import imageUrl from '/public/images/third/5.3.512.jpeg'
 
 const size = ref(50)
-const minFilterType = ref('NEAREST')
 const magFilterType = ref('NEAREST')
+const isGenerateMipmap = ref(false)
 const maxSize = 100
 
 const format = (val) => parseFloat((val / 50).toString())
@@ -62,7 +59,7 @@ const fragmentCode = `
 let gl, program, a_Position, canvas, img
 
 const initGl = () => {
-  gl = createGl('#ice-5_1')
+  gl = createGl('#ice-5_2')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -100,14 +97,13 @@ const drawPicture = () => {
   gl.activeTexture(gl.TEXTURE0)
   gl.bindTexture(gl.TEXTURE_2D, texture)
 
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl[minFilterType.value])
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl[magFilterType.value])
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
 
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img)
 
-  gl.generateMipmap(gl.TEXTURE_2D)
+  isGenerateMipmap.value && gl.generateMipmap(gl.TEXTURE_2D)
 
   const u_Sampler = gl.getUniformLocation(program, 'u_Sampler')
   gl.uniform1i(u_Sampler, 0)
@@ -143,7 +139,7 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Third5_1'
+  name: 'Third5_2'
 })
 </script>
 

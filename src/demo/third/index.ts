@@ -7,6 +7,8 @@ import Third3_2 from './3_2.vue'
 import Third4_1 from './4_1.vue'
 import Third4_2 from './4_2.vue'
 import Third5_1 from './5_1.vue'
+import Third5_2 from './5_2.vue'
+import Third5_3 from './5_3.vue'
 
 export const thirdComponents = [
   Third1_1,
@@ -18,4 +20,6 @@ export const thirdComponents = [
   Third4_1,
   Third4_2,
   Third5_1,
+  Third5_2,
+  Third5_3,
 ]
