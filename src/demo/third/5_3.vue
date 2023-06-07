@@ -166,7 +166,7 @@ export default defineComponent({
   justify-content: space-between;
   align-items: flex-start;
   .options-group {
-    padding-left: 8px;
+    padding-left: 12px;
     flex: 1;
     box-sizing: border-box;
   }
