@@ -1,13 +1,16 @@
 <template>
   <div class="wrapper">
-    <canvas id="ice-6_2" width="420" height="420"></canvas>
+    <canvas id="ice-6_2" width="480" height="480"></canvas>
 
     <el-form class="options-group" size="small" label-position="top">
-      <el-form-item label="选择纹理：">
+      <el-form-item label="选择纹理和混色搭配：">
         <el-radio-group v-model="texType" @change="drawPicture">
           <el-radio :label="1">樱木</el-radio>
           <el-radio :label="2">流川</el-radio>
-          <el-radio :label="3">樱木+流川</el-radio>
+          <el-radio :label="3">樱木+流川(乘法)</el-radio>
+          <el-radio :label="4">樱木+流川(除法)</el-radio>
+          <el-radio :label="5">樱木+流川(加法)</el-radio>
+          <el-radio :label="6">樱木+流川(减法)</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>
@@ -52,12 +55,20 @@ const fragmentMultipleCode = `
   varying vec2 v_TexCoord;
   uniform sampler2D u_Sampler1;
   uniform sampler2D u_Sampler2;
+  uniform float u_DrawIndex;
 
   void main () {
     vec4 color1 = texture2D(u_Sampler1, v_TexCoord);
     vec4 color2 = texture2D(u_Sampler2, v_TexCoord);
-    gl_FragColor = vec4(color1.rgb * color2.rgb, 1.);
-    // gl_FragColor = vec4(texture2D(u_Sampler1, v_TexCoord).rgb - texture2D(u_Sampler2, v_TexCoord).rgb, 1.0);
+    if (u_DrawIndex >= 6.0) {
+      gl_FragColor = vec4(color1.rgb - color2.rgb, 1.);
+    } else if (u_DrawIndex >= 5.0) {
+      gl_FragColor = vec4(color1.rgb + color2.rgb, 1.);
+    } else if (u_DrawIndex >= 4.0) {
+      gl_FragColor = vec4(color1.rgb / color2.rgb, 1.);
+    } else {
+      gl_FragColor = vec4(color1.rgb * color2.rgb, 1.);
+    }
   }
 `
 
@@ -115,6 +126,21 @@ const drawPicture = () => {
     initGl(fragmentMultipleCode)
     const u_Sampler1 = gl.getUniformLocation(program, 'u_Sampler1')
     const u_Sampler2 = gl.getUniformLocation(program, 'u_Sampler2')
+    const u_DrawIndex = gl.getUniformLocation(program, 'u_DrawIndex')
+    switch (texType.value) {
+      case 3:
+        gl.uniform1f(u_DrawIndex, 3.)
+        break
+      case 4:
+        gl.uniform1f(u_DrawIndex, 4.)
+        break
+      case 5:
+        gl.uniform1f(u_DrawIndex, 5.)
+        break
+      case 6:
+        gl.uniform1f(u_DrawIndex, 6.)
+        break
+    }
     initTexture(img1, u_Sampler1, 0)
     initTexture(img2, u_Sampler2, 1)
   } else {
