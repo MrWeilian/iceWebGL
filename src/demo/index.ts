@@ -1,12 +1,14 @@
 import { secondComponents } from './second'
 import { thirdComponents } from './third'
+import { fourthComponents } from './fourth'
 import type { App, Plugin } from 'vue'
 
 const INSTALLED_KEY = Symbol('INSTALLED_KEY')
 
 const components = [
   ...secondComponents,
-  ...thirdComponents
+  ...thirdComponents,
+  ...fourthComponents
 ]
 
 const install = (app: App) => {
