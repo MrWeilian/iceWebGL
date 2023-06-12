@@ -1,14 +1,11 @@
 <template>
   <el-form label-position="top" style="width: 600px;">
-    <el-form-item label="x偏移值：">
-      <el-slider v-model="xVal" :format-tooltip="format" :min="-1" :max="1" :step="0.01" />
-    </el-form-item>
-    <el-form-item label="y偏移值：">
-      <el-slider v-model="yVal" :format-tooltip="format" :min="-1" :max="1" :step="0.01" />
+    <el-form-item label="scale 缩放比例：">
+      <el-slider v-model="scaleVal" :format-tooltip="format" />
     </el-form-item>
   </el-form>
 
-  <canvas id="ice-1_1" width="600" height="300"></canvas>
+  <canvas id="ice-1_2" width="600" height="300"></canvas>
 </template>
 
 <script setup lang="ts">
@@ -20,17 +17,19 @@ import {
   createBuffer
 } from '@ice-webgl/utils'
 
-const xVal = ref(0)
-const yVal = ref(0)
+const defaultOrigin = 50.0
+
+const scaleVal = ref(defaultOrigin)
+const format = (val) => parseFloat((val / 50).toFixed(2).toString())
 
 const vertexCode = `
   attribute vec4 a_Position;
   attribute vec4 a_Color;
   varying vec4 v_Color;
-  uniform vec4 u_Position;
+  uniform float u_Scale;
 
   void main () {
-    gl_Position = a_Position + u_Position;
+    gl_Position = vec4(a_Position.x * u_Scale, a_Position.y * u_Scale, 0., 1.);
     v_Color= a_Color;
   }
 `
@@ -47,7 +46,7 @@ const fragmentCode = `
 let gl, a_Position, canvas, a_Color, program
 
 const initGl = () => {
-  gl = createGl('#ice-1_1')
+  gl = createGl('#ice-1_2')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -67,6 +66,9 @@ const initGl = () => {
     0., 0., 1., 1.,
   ])
 
+  const u_Position = gl.getUniformLocation(program, 'u_Scale')
+  const scale = scaleVal.value / defaultOrigin
+  gl.uniform1f(u_Position, scale)
   // 顶点坐标
   createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Position, 2)
   // 颜色值
@@ -77,18 +79,10 @@ const initGl = () => {
   gl.drawArrays(gl.TRIANGLES, 0, 3)
 }
 
-watch(xVal, x => {
-  const u_Position = gl.getUniformLocation(program, 'u_Position')
-  const xMoveVertices = new Float32Array([x, yVal.value, 0., 0.])
-  gl.uniform4fv(u_Position, xMoveVertices)
-  gl.clear(gl.COLOR_BUFFER_BIT)
-  gl.drawArrays(gl.TRIANGLES, 0, 3)
-})
-
-watch(yVal, y => {
-  const u_Position = gl.getUniformLocation(program, 'u_Position')
-  const xMoveVertices = new Float32Array([xVal.value, y, 0., 0.])
-  gl.uniform4fv(u_Position, xMoveVertices)
+watch(scaleVal, x => {
+  const u_Position = gl.getUniformLocation(program, 'u_Scale')
+  const scale = scaleVal.value / defaultOrigin
+  gl.uniform1f(u_Position, scale)
   gl.clear(gl.COLOR_BUFFER_BIT)
   gl.drawArrays(gl.TRIANGLES, 0, 3)
 })
@@ -102,6 +96,6 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Fourth1_1'
+  name: 'Fourth1_2'
 })
 </script>
