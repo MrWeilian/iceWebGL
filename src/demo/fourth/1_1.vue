@@ -1,7 +1,10 @@
 <template>
-  <el-form label-width="54px">
+  <el-form label-position="top" style="width: 600px;">
     <el-form-item label="x：">
       <el-slider v-model="xVal" />
+    </el-form-item>
+    <el-form-item label="y：">
+      <el-slider v-model="yVal" />
     </el-form-item>
   </el-form>
 
@@ -9,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import {
   createGl,
   createShader,
@@ -17,15 +20,19 @@ import {
   createBuffer
 } from '@ice-webgl/utils'
 
-const xVal = ref(0)
+const defaultOrigin = 50.0
+
+const xVal = ref(defaultOrigin)
+const yVal = ref(defaultOrigin)
 
 const vertexCode = `
   attribute vec4 a_Position;
   attribute vec4 a_Color;
   varying vec4 v_Color;
+  uniform vec4 u_Position;
 
   void main () {
-    gl_Position = a_Position;
+    gl_Position = a_Position + u_Position;
     v_Color= a_Color;
   }
 `
@@ -39,7 +46,7 @@ const fragmentCode = `
   }
 `
 
-let gl, a_Position, canvas, a_Color
+let gl, a_Position, canvas, a_Color, program
 
 const initGl = () => {
   gl = createGl('#ice-1_1')
@@ -47,7 +54,7 @@ const initGl = () => {
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
 
-  const program = createProgram(gl, vertexShader, fragmentShader)
+  program = createProgram(gl, vertexShader, fragmentShader)
 
   a_Position = gl.getAttribLocation(program, 'a_Position')
   a_Color = gl.getAttribLocation(program, 'a_Color')
@@ -71,6 +78,26 @@ const initGl = () => {
   gl.clear(gl.COLOR_BUFFER_BIT)
   gl.drawArrays(gl.TRIANGLES, 0, 3)
 }
+
+watch(xVal, x => {
+  const u_Position = gl.getUniformLocation(program, 'u_Position')
+  const move = (x - defaultOrigin) / defaultOrigin
+  const y = (yVal.value - defaultOrigin) / defaultOrigin
+  const xMoveVertices = new Float32Array([move, y, 0., 0.])
+  gl.uniform4fv(u_Position, xMoveVertices)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+  gl.drawArrays(gl.TRIANGLES, 0, 3)
+})
+
+watch(yVal, y => {
+  const u_Position = gl.getUniformLocation(program, 'u_Position')
+  const move = (y - defaultOrigin) / defaultOrigin
+  const x = (xVal.value - defaultOrigin) / defaultOrigin
+  const xMoveVertices = new Float32Array([x, move, 0., 0.])
+  gl.uniform4fv(u_Position, xMoveVertices)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+  gl.drawArrays(gl.TRIANGLES, 0, 3)
+})
 
 onMounted(() => {
   initGl()
