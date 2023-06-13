@@ -1,14 +1,11 @@
 <template>
-  <el-form label-position="top" style="width: 600px;">
-    <el-form-item label="x偏移值：">
-      <el-slider v-model="xVal" :min="-1" :max="1" :step="0.01" />
-    </el-form-item>
-    <el-form-item label="y偏移值：">
-      <el-slider v-model="yVal" :min="-1" :max="1" :step="0.01" />
+  <el-form label-position="top" style="width: 400px;">
+    <el-form-item label="rotate 旋转角度：">
+      <el-slider v-model="rotateVal" :min="-180" :max="180" />
     </el-form-item>
   </el-form>
 
-  <canvas id="ice-1_1" width="600" height="300"></canvas>
+  <canvas id="ice-1_3" width="400" height="400"></canvas>
 </template>
 
 <script setup lang="ts">
@@ -20,17 +17,18 @@ import {
   createBuffer
 } from '@ice-webgl/utils'
 
-const xVal = ref(0)
-const yVal = ref(0)
+const defaultOrigin = 0
+
+const rotateVal = ref(defaultOrigin)
 
 const vertexCode = `
   attribute vec4 a_Position;
   attribute vec4 a_Color;
   varying vec4 v_Color;
-  uniform vec4 u_Position;
+  uniform float u_Rotate;
 
   void main () {
-    gl_Position = a_Position + u_Position;
+    gl_Position = vec4(a_Position.x * cos(u_Rotate) - a_Position.y * sin(u_Rotate), a_Position.x * sin(u_Rotate) + a_Position.y * cos(u_Rotate), 0., 1.);
     v_Color= a_Color;
   }
 `
@@ -47,7 +45,7 @@ const fragmentCode = `
 let gl, a_Position, canvas, a_Color, program
 
 const initGl = () => {
-  gl = createGl('#ice-1_1')
+  gl = createGl('#ice-1_3')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -58,7 +56,7 @@ const initGl = () => {
   a_Color = gl.getAttribLocation(program, 'a_Color')
   const vertices = new Float32Array([
     -.3, -.3,
-    0., .6,
+    0., .3,
     .3, -.3,
   ])
   const colors = new Float32Array([
@@ -67,6 +65,8 @@ const initGl = () => {
     0., 0., 1., 1.,
   ])
 
+  const u_Rotate = gl.getUniformLocation(program, 'u_Rotate')
+  gl.uniform1f(u_Rotate, 0.)
   // 顶点坐标
   createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Position, 2)
   // 颜色值
@@ -77,18 +77,10 @@ const initGl = () => {
   gl.drawArrays(gl.TRIANGLES, 0, 3)
 }
 
-watch(xVal, x => {
-  const u_Position = gl.getUniformLocation(program, 'u_Position')
-  const xMoveVertices = new Float32Array([x, yVal.value, 0., 0.])
-  gl.uniform4fv(u_Position, xMoveVertices)
-  gl.clear(gl.COLOR_BUFFER_BIT)
-  gl.drawArrays(gl.TRIANGLES, 0, 3)
-})
-
-watch(yVal, y => {
-  const u_Position = gl.getUniformLocation(program, 'u_Position')
-  const xMoveVertices = new Float32Array([xVal.value, y, 0., 0.])
-  gl.uniform4fv(u_Position, xMoveVertices)
+watch(rotateVal, x => {
+  const u_Rotate = gl.getUniformLocation(program, 'u_Rotate')
+  const radian = rotateVal.value * Math.PI / 180
+  gl.uniform1f(u_Rotate, radian)
   gl.clear(gl.COLOR_BUFFER_BIT)
   gl.drawArrays(gl.TRIANGLES, 0, 3)
 })
@@ -102,6 +94,6 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Fourth1_1'
+  name: 'Fourth1_3'
 })
 </script>
