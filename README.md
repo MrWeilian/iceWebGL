@@ -25,3 +25,9 @@
 3. [实战消除锯齿](https://ice-webgl.netlify.app/content/%E4%B8%89%E3%80%81WebGL%E9%A2%9C%E8%89%B2%E5%92%8C%E7%BA%B9%E7%90%86/3.%20%E5%AE%9E%E6%88%98%E6%B6%88%E9%99%A4%E9%94%AF%E9%BD%BF.html)
 4. [初探纹理图像](https://ice-webgl.netlify.app/content/%E4%B8%89%E3%80%81WebGL%E9%A2%9C%E8%89%B2%E5%92%8C%E7%BA%B9%E7%90%86/4.%20%E5%88%9D%E6%8E%A2%E7%BA%B9%E7%90%86%E5%9B%BE%E5%83%8F.html)
 5. [深入纹理细节之FILTER](https://ice-webgl.netlify.app/content/%E4%B8%89%E3%80%81WebGL%E9%A2%9C%E8%89%B2%E5%92%8C%E7%BA%B9%E7%90%86/5.%20%E6%B7%B1%E5%85%A5%E7%BA%B9%E7%90%86%E7%BB%86%E8%8A%82%E4%B9%8BFILTER.html)
+6. [深入WRAP和多纹理](https://ice-webgl.netlify.app/content/%E4%B8%89%E3%80%81WebGL%E9%A2%9C%E8%89%B2%E5%92%8C%E7%BA%B9%E7%90%86/6.%20%E6%B7%B1%E5%85%A5WRAP%E5%92%8C%E5%A4%9A%E7%BA%B9%E7%90%86.html)
+
+## 四、WebGL二维动画
+1. [会动的三角形](https://ice-webgl.netlify.app/content/%E5%9B%9B%E3%80%81WebGL%E4%BA%8C%E7%BB%B4%E5%8A%A8%E7%94%BB/1.%20%E4%BC%9A%E5%8A%A8%E7%9A%84%E4%B8%89%E8%A7%92%E5%BD%A2.html)
+2. [图形学的数学基础](https://ice-webgl.netlify.app/content/%E5%9B%9B%E3%80%81WebGL%E4%BA%8C%E7%BB%B4%E5%8A%A8%E7%94%BB/2.%20%E5%9B%BE%E5%BD%A2%E5%AD%A6%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80.html)
+3. [用矩阵实战图形变换](https://ice-webgl.netlify.app/content/%E5%9B%9B%E3%80%81WebGL%E4%BA%8C%E7%BB%B4%E5%8A%A8%E7%94%BB/3.%20%E7%94%A8%E7%9F%A9%E9%98%B5%E5%AE%9E%E6%88%98%E5%9B%BE%E5%BD%A2%E5%8F%98%E6%8D%A2.html)
