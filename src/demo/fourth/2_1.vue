@@ -3,9 +3,6 @@
     <el-form-item label="x偏移值：">
       <el-slider v-model="xVal" :min="-1" :max="1" :step="0.01" />
     </el-form-item>
-    <el-form-item label="y偏移值：">
-      <el-slider v-model="yVal" :min="-1" :max="1" :step="0.01" />
-    </el-form-item>
   </el-form>
 
   <canvas id="ice-2_1" width="600" height="300"></canvas>
@@ -21,7 +18,6 @@ import {
 } from '@ice-webgl/utils'
 
 const xVal = ref(0)
-const yVal = ref(0)
 
 const vertexCode = `
   attribute vec4 a_Position;
@@ -91,17 +87,9 @@ watch(xVal, x => {
       1., 0., 0., 0.,
       0., 1., 0., 0.,
       0., 0., 1., 0.,
-      x, yVal.value, 0., 1.
+      x, 0., 0., 1.
   ])
   gl.uniformMatrix4fv(u_translateMatrix, false, translateMatrix)
-  gl.clear(gl.COLOR_BUFFER_BIT)
-  gl.drawArrays(gl.TRIANGLES, 0, 3)
-})
-
-watch(yVal, y => {
-  const u_Position = gl.getUniformLocation(program, 'u_Position')
-  const xMoveVertices = new Float32Array([xVal.value, y, 0., 0.])
-  gl.uniform4fv(u_Position, xMoveVertices)
   gl.clear(gl.COLOR_BUFFER_BIT)
   gl.drawArrays(gl.TRIANGLES, 0, 3)
 })
