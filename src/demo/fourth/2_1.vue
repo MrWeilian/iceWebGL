@@ -23,10 +23,10 @@ const vertexCode = `
   attribute vec4 a_Position;
   attribute vec4 a_Color;
   varying vec4 v_Color;
-  uniform mat4 u_translateMatrix;
+  uniform mat4 u_TranslateMatrix;
 
   void main () {
-    gl_Position = u_translateMatrix * a_Position;
+    gl_Position = u_TranslateMatrix * a_Position;
     v_Color= a_Color;
   }
 `
@@ -40,7 +40,7 @@ const fragmentCode = `
   }
 `
 
-let gl, a_Position, canvas, a_Color, program, u_translateMatrix
+let gl, a_Position, canvas, a_Color, program, u_TranslateMatrix
 
 const initGl = () => {
   gl = createGl('#ice-2_1')
@@ -52,7 +52,7 @@ const initGl = () => {
 
   a_Position = gl.getAttribLocation(program, 'a_Position')
   a_Color = gl.getAttribLocation(program, 'a_Color')
-  u_translateMatrix = gl.getUniformLocation(program, 'u_translateMatrix')
+  u_TranslateMatrix = gl.getUniformLocation(program, 'u_TranslateMatrix')
   const vertices = new Float32Array([
     -.3, -.3,
     0., .6,
@@ -70,7 +70,7 @@ const initGl = () => {
     0., 0., 1., 1.,
   ])
 
-  gl.uniformMatrix4fv(u_translateMatrix, false, translateMatrix)
+  gl.uniformMatrix4fv(u_TranslateMatrix, false, translateMatrix)
 
   // 顶点坐标
   createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Position, 2)
@@ -89,7 +89,7 @@ watch(xVal, x => {
       0., 0., 1., 0.,
       x, 0., 0., 1.
   ])
-  gl.uniformMatrix4fv(u_translateMatrix, false, translateMatrix)
+  gl.uniformMatrix4fv(u_TranslateMatrix, false, translateMatrix)
   gl.clear(gl.COLOR_BUFFER_BIT)
   gl.drawArrays(gl.TRIANGLES, 0, 3)
 })
