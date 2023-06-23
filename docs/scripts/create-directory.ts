@@ -37,8 +37,8 @@ const getDirectory = async (): Promise<directoryTree[]> => {
         children: secondTitles
           ?.filter(_ => !_.includes('总结'))
           .map(_ => ({
-            // url hash 需要处理成小写字母；符号 ` 、 空格、需要转换成 -
-            title: `[${_}](/content/${dirItemPath}/${encodeURIComponent(firstTitle)}.html#${_.trim().toLowerCase().replaceAll('`', '').replaceAll(' ', '-').replaceAll('？', '')})`
+            // url hash 需要处理成小写字母；符号 ` 、 空格、& 需要转换成 -
+            title: `[${_}](/content/${dirItemPath}/${encodeURIComponent(firstTitle)}.html#${_.trim().toLowerCase().replaceAll('`', '').replaceAll(' ', '-').replaceAll('&', '-').replaceAll('？', '')})`
           }))
       })
     }

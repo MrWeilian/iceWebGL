@@ -1,11 +1,11 @@
 <template>
-  <el-form label-position="top" style="width: 400px;">
-    <el-form-item label="rotate 旋转角度：">
-      <el-slider v-model="rotateVal" :min="-180" :max="180" />
+  <el-form label-position="top" style="width: 600px;">
+    <el-form-item label="复合变换（平移+旋转）：">
+      <el-slider v-model="rotateVal" :min="-360" :max="360" />
     </el-form-item>
   </el-form>
 
-  <canvas id="ice-4_1" width="400" height="400"></canvas>
+  <canvas id="ice-4_1" width="600" height="500"></canvas>
 </template>
 
 <script setup lang="ts">
@@ -43,7 +43,7 @@ const fragmentCode = `
   }
 `
 
-let gl, a_Position, canvas, a_Color, program
+let gl, a_Position, canvas, a_Color, program, u_ModelMatrix
 
 const initGl = () => {
   gl = createGl('#ice-4_1')
@@ -66,8 +66,7 @@ const initGl = () => {
     0., 0., 1., 1.,
   ])
   const identityMatrix = new Matrix4()
-  console.log(111, identityMatrix);
-  const u_ModelMatrix = gl.getUniformLocation(program, 'u_ModelMatrix')
+  u_ModelMatrix = gl.getUniformLocation(program, 'u_ModelMatrix')
   gl.uniformMatrix4fv(u_ModelMatrix, false, identityMatrix.elements)
   // 顶点坐标
   createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Position, 2)
@@ -79,10 +78,21 @@ const initGl = () => {
   gl.drawArrays(gl.TRIANGLES, 0, 3)
 }
 
-watch(rotateVal, x => {
-  const u_Rotate = gl.getUniformLocation(program, 'u_Rotate')
-  const radian = rotateVal.value * Math.PI / 180
-  gl.uniform1f(u_Rotate, radian)
+watch(rotateVal, rotateVal => {
+  // 旋转矩阵
+  const rotateMatrix = new Matrix4()
+  const radian = rotateVal * Math.PI / 180
+  rotateMatrix.makeRotationZ(radian)
+  // 平移矩阵
+  const translateMatrix = new Matrix4()
+  const translateX = rotateVal / 360.0
+  translateMatrix.makeTranslation(translateX, 0., 0.)
+  // 相乘得到模型矩阵
+  translateMatrix.multiply(rotateMatrix)
+  // rotateMatrix.multiply(translateMatrix)
+
+  gl.uniformMatrix4fv(u_ModelMatrix, false, translateMatrix.elements)
+  // gl.uniformMatrix4fv(u_ModelMatrix, false, rotateMatrix.elements)
   gl.clear(gl.COLOR_BUFFER_BIT)
   gl.drawArrays(gl.TRIANGLES, 0, 3)
 })
