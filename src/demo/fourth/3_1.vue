@@ -5,7 +5,7 @@
     </el-form-item>
   </el-form>
 
-  <canvas id="ice-2_1" width="600" height="300"></canvas>
+  <canvas id="ice-3_1" width="600" height="300"></canvas>
 </template>
 
 <script setup lang="ts">
@@ -43,7 +43,7 @@ const fragmentCode = `
 let gl, a_Position, canvas, a_Color, program, u_TranslateMatrix
 
 const initGl = () => {
-  gl = createGl('#ice-2_1')
+  gl = createGl('#ice-3_1')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -103,6 +103,6 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Fourth2_1'
+  name: 'Fourth3_1'
 })
 </script>

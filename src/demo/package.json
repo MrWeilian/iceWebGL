@@ -4,6 +4,7 @@
   "author": "",
   "dependencies": {
     "@ice-webgl/utils": "workspace:*",
-    "element-plus": "^2.3.4"
+    "element-plus": "^2.3.4",
+    "three": "^0.153.0"
   }
 }
