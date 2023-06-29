@@ -48,13 +48,13 @@ const initGl = () => {
   a_Color = gl.getAttribLocation(program, 'a_Color')
   u_ModelMatrix = gl.getUniformLocation(program, 'u_ModelMatrix')
   const matrix = new Matrix4()
-  // const radian = 45 * Math.PI / 180
-  // matrix.makeRotationY(radian)
-  // const matrix2 = new Matrix4()
-  // const radian2 = 45 * Math.PI / 180
-  // matrix2.makeRotationX(radian2)
-  // matrix2.multiply(matrix)
-  gl.uniformMatrix4fv(u_ModelMatrix, false, matrix.elements)
+  const radian = 45 * Math.PI / 180
+  matrix.makeRotationY(radian)
+  const matrix2 = new Matrix4()
+  const radian2 = 45 * Math.PI / 180
+  matrix2.makeRotationX(radian2)
+  matrix2.multiply(matrix)
+  gl.uniformMatrix4fv(u_ModelMatrix, false, matrix2.elements)
   const vertices = new Float32Array([
     .5, .5, .5,
     -.5, .5, .5,
@@ -88,6 +88,7 @@ const initGl = () => {
   const indexBuffer = gl.createBuffer()
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer)
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW)
+  gl.enable(gl.DEPTH_TEST)
 
   // 顶点坐标
   createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Position, 3)
