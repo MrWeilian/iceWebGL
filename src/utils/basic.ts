@@ -30,10 +30,10 @@ export const createProgram = (gl, vertexShader, fragmentShader) => {
   gl.deleteProgram(program);
 }
 
-export const createBuffer = (gl, target = gl.ARRAY_BUFFER, data, attribute, size) => {
+export const createBuffer = (gl, target = gl.ARRAY_BUFFER, data, attribute, size, stride = 0, offset = 0) => {
   const buffer = gl.createBuffer()
   gl.bindBuffer(target, buffer)
   gl.bufferData(target, data, gl.STATIC_DRAW)
-  gl.vertexAttribPointer(attribute, size, gl.FLOAT, false, 0, 0)
+  gl.vertexAttribPointer(attribute, size, gl.FLOAT, false, stride, offset)
   gl.enableVertexAttribArray(attribute)
 }
