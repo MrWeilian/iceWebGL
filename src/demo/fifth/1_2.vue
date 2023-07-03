@@ -1,6 +1,6 @@
 <template>
   <canvas
-      id="ice-1_1"
+      id="ice-1_2"
       width="640"
       height="500"
       @mousedown="mousedown"
@@ -45,13 +45,13 @@ const fragmentCode = `
 
 let gl, a_Position, canvas, a_Color, program, u_ModelMatrix, indices
 
-let baseRotateX = 0
-let baseRotateY = 0
+let baseRotateX = 70
+let baseRotateY = -30
 let mousedownX = 0
 let mousedownY = 0
 
 const initGl = () => {
-  gl = createGl('#ice-1_1')
+  gl = createGl('#ice-1_2')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -62,17 +62,46 @@ const initGl = () => {
   a_Color = gl.getAttribLocation(program, 'a_Color')
   u_ModelMatrix = gl.getUniformLocation(program, 'u_ModelMatrix')
   const matrix = new Matrix4()
-  gl.uniformMatrix4fv(u_ModelMatrix, false, matrix.elements)
+  const radian = baseRotateX % 360 * Math.PI / 180
+  matrix.makeRotationY(radian)
+  const matrix2 = new Matrix4()
+  const radian2 = baseRotateY % 360 * Math.PI / 180
+  matrix2.makeRotationX(radian2)
+  matrix2.multiply(matrix)
+  gl.uniformMatrix4fv(u_ModelMatrix, false, matrix2.elements)
   const vertices = new Float32Array([
-    -.5, .5, .5, // v0
-    -.5, -.5, .5, // v1
-    .5, -.5, .5, // v2
-    .5, .5, .5, // v3
-    .5, .5, -.5, // v4
-    .5, -.5, -.5, // v5
-    -.5, -.5, -.5, // v6
-    -.5, .5, -.5,  // v7
+    // 蓝
+    -0.5, -0.5, 0.5, 0.98, 0.86, 0.078, 1,
+    0.5, -0.5, 0.5, 0.98, 0.86, 0.078, 1,
+    0.5, 0.5, 0.5, 0.98, 0.86, 0.078, 1,
+    -0.5, 0.5, 0.5, 0.98, 0.86, 0.078, 1,
+    // 绿
+    -0.5, 0.5, 0.5, 0.45, 0.82, 0.24, 1,
+    -0.5, 0.5, -0.5, 0.45, 0.82, 0.24, 1,
+    -0.5, -0.5, -0.5, 0.45, 0.82, 0.24, 1,
+    -0.5, -0.5, 0.5, 0.45, 0.82, 0.24, 1,
+    // 黄
+    0.5, 0.5, 0.5, 0.086, 0.53, 1, 1,
+    0.5, -0.5, 0.5, 0.086, 0.53, 1, 1,
+    0.5, -0.5, -0.5, 0.086, 0.53, 1, 1,
+    0.5, 0.5, -0.5, 0.086, 0.53, 1, 1,
+    // 橙
+    0.5, 0.5, -0.5, 0.98, 0.68, 0.078, 1,
+    0.5, -0.5, -0.5, 0.98, 0.68, 0.078, 1,
+    -0.5, -0.5, -0.5, 0.98, 0.68, 0.078, 1,
+    -0.5, 0.5, -0.5, 0.98, 0.68, 0.078, 1,
+    // 红
+    -0.5, 0.5, 0.5, 1, 0.30, 0.31, 1,
+    0.5, 0.5, 0.5, 1, 0.30, 0.31, 1,
+    0.5, 0.5, -0.5, 1, 0.30, 0.31, 1,
+    -0.5, 0.5, -0.5, 1, 0.30, 0.31, 1,
+    // 紫色
+    -0.5, -0.5, 0.5, 0.70, 0.50, 0.92, 1,
+    -0.5, -0.5, -0.5, 0.70, 0.50, 0.92, 1,
+    0.5, -0.5, -0.5, 0.70, 0.50, 0.92, 1,
+    0.5, -0.5, 0.5, 0.70, 0.50, 0.92, 1,
   ])
+  const byte = vertices.BYTES_PER_ELEMENT
   const colors = new Float32Array([
     1., 1., 1., 1.,
     1., 1., 0., 1.,
@@ -85,12 +114,12 @@ const initGl = () => {
   ])
 
   indices = new Uint8Array([
-    0, 1, 2, 0, 2, 3, // 前
-    3, 2, 5, 3, 5, 4, // 右
-    4, 5, 6, 4, 6, 7, // 后
-    7, 0, 6, 0, 1, 6, // 左
-    0, 3, 4, 0, 4, 7, // 上
-    1, 2, 5, 1, 5, 6 // 下
+    0, 1, 2, 0, 2, 3,
+    4, 5, 6, 4, 6, 7,
+    8, 9, 10, 8, 10, 11,
+    12, 13, 14, 12, 14, 15,
+    16, 17, 18, 16, 18, 19,
+    20, 21, 22, 20, 22, 23
   ])
 
   const indexBuffer = gl.createBuffer()
@@ -99,9 +128,9 @@ const initGl = () => {
   gl.enable(gl.DEPTH_TEST)
 
   // 顶点坐标
-  createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Position, 3, 0, 0)
+  createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Position, 3, byte * 7, 0)
   // 颜色值
-  createBuffer(gl, gl.ARRAY_BUFFER, colors, a_Color, 4, 0, 0)
+  createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Color, 4, byte * 7, byte * 3)
 
   gl.clearColor(0., 0., 0., .9)
   gl.clear(gl.COLOR_BUFFER_BIT)
@@ -112,8 +141,6 @@ const mousemove = e => {
   if (!canDrag.value) return
   const moveX = (mousedownX - e.offsetX + baseRotateX) % 360
   const moveY = (mousedownY - e.offsetY + baseRotateY) % 360
-  console.log('moveX', moveX)
-  console.log('moveY', moveY)
   const matrixX = new Matrix4()
   const matrixY = new Matrix4()
   const radianX = moveX * Math.PI / 180
@@ -152,6 +179,6 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Fifth1_1'
+  name: 'Fifth1_2'
 })
 </script>
