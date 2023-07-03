@@ -2,5 +2,8 @@
   "name": "@ice-webgl/utils",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts"
+  "main": "index.ts",
+  "dependencies": {
+    "three": "^0.153.0"
+  }
 }

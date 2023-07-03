@@ -16,10 +16,10 @@ import {
   createGl,
   createShader,
   createProgram,
-  createBuffer
+  createBuffer,
+  useMouseMatrixRotate
 } from '@ice-webgl/utils'
 import { Matrix4 } from 'three'
-import { useMouseMatrixRotate } from '@ice-webgl/utils'
 
 const vertexCode = `
   attribute vec4 a_Position;

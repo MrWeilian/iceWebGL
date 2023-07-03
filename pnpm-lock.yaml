@@ -49,7 +49,10 @@ importers:
       three: 0.153.0
 
   src/utils:
-    specifiers: {}
+    specifiers:
+      three: ^0.153.0
+    dependencies:
+      three: 0.153.0
 
 packages:
 

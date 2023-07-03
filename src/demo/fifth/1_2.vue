@@ -16,7 +16,8 @@ import {
   createGl,
   createShader,
   createProgram,
-  createBuffer, useMouseMatrixRotate
+  createBuffer,
+  useMouseMatrixRotate
 } from '@ice-webgl/utils'
 import { Matrix4 } from 'three'
 
