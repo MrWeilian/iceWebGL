@@ -7,7 +7,7 @@ export function useMouseMatrixRotate (baseRotateX = 0, baseRotateY = 0) {
 
   const canDrag = ref(false)
 
-  const mousemove = (e, gl, u_ModelMatrix, indices) => {
+  const mousemove = (e, gl, u_ModelMatrix, indices, mode = 'TRIANGLES') => {
     if (!canDrag.value) return
     const moveX = (mousedownX - e.offsetX + baseRotateX) % 360
     const moveY = (mousedownY - e.offsetY + baseRotateY) % 360
@@ -22,7 +22,7 @@ export function useMouseMatrixRotate (baseRotateX = 0, baseRotateY = 0) {
     matrixX.multiply(matrixY)
     gl.uniformMatrix4fv(u_ModelMatrix, false, matrixX.elements)
     gl.clear(gl.COLOR_BUFFER_BIT)
-    gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_BYTE, 0)
+    gl.drawElements(gl[mode], indices.length, gl.UNSIGNED_BYTE, 0)
   }
 
   const mousedown = e => {

@@ -1,10 +1,10 @@
 <template>
   <canvas
-      id="ice-1_2"
+      id="ice-2_1"
       width="640"
       height="500"
       @mousedown="mousedown"
-      @mousemove="mousemove($event, gl, u_ModelMatrix, indices)"
+      @mousemove="mousemove($event, gl, u_ModelMatrix, indices, 'LINE_STRIP')"
       @mouseleave="mouseleave"
       @mouseup="mouseup"
   />
@@ -23,22 +23,18 @@ import { Matrix4 } from 'three'
 
 const vertexCode = `
   attribute vec4 a_Position;
-  attribute vec4 a_Color;
-  varying vec4 v_Color;
   uniform mat4 u_ModelMatrix;
 
   void main () {
     gl_Position = u_ModelMatrix * a_Position;
-    v_Color= a_Color;
   }
 `
 
 const fragmentCode = `
   precision mediump float;
-  varying vec4 v_Color;
 
   void main () {
-    gl_FragColor = v_Color;
+    gl_FragColor = vec4(0.086, 0.53, 1, 1);
   }
 `
 
@@ -55,7 +51,7 @@ const {
 } = useMouseMatrixRotate(baseRotateX, baseRotateY)
 
 const initGl = () => {
-  gl = createGl('#ice-1_2')
+  gl = createGl('#ice-2_1')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -74,46 +70,24 @@ const initGl = () => {
   matrix2.multiply(matrix)
   gl.uniformMatrix4fv(u_ModelMatrix, false, matrix2.elements)
   const vertices = new Float32Array([
-    // 黄
-    -0.5, -0.5, 0.5, 0.98, 0.86, 0.078, 1,
-    0.5, -0.5, 0.5, 0.98, 0.86, 0.078, 1,
-    0.5, 0.5, 0.5, 0.98, 0.86, 0.078, 1,
-    -0.5, 0.5, 0.5, 0.98, 0.86, 0.078, 1,
-    // 绿
-    -0.5, 0.5, 0.5, 0.45, 0.82, 0.24, 1,
-    -0.5, 0.5, -0.5, 0.45, 0.82, 0.24, 1,
-    -0.5, -0.5, -0.5, 0.45, 0.82, 0.24, 1,
-    -0.5, -0.5, 0.5, 0.45, 0.82, 0.24, 1,
-    // 蓝
-    0.5, 0.5, 0.5, 0.086, 0.53, 1, 1,
-    0.5, -0.5, 0.5, 0.086, 0.53, 1, 1,
-    0.5, -0.5, -0.5, 0.086, 0.53, 1, 1,
-    0.5, 0.5, -0.5, 0.086, 0.53, 1, 1,
-    // 橙
-    0.5, 0.5, -0.5, 0.98, 0.68, 0.078, 1,
-    0.5, -0.5, -0.5, 0.98, 0.68, 0.078, 1,
-    -0.5, -0.5, -0.5, 0.98, 0.68, 0.078, 1,
-    -0.5, 0.5, -0.5, 0.98, 0.68, 0.078, 1,
-    // 红
-    -0.5, 0.5, 0.5, 1, 0.30, 0.31, 1,
-    0.5, 0.5, 0.5, 1, 0.30, 0.31, 1,
-    0.5, 0.5, -0.5, 1, 0.30, 0.31, 1,
-    -0.5, 0.5, -0.5, 1, 0.30, 0.31, 1,
-    // 紫色
-    -0.5, -0.5, 0.5, 0.70, 0.50, 0.92, 1,
-    -0.5, -0.5, -0.5, 0.70, 0.50, 0.92, 1,
-    0.5, -0.5, -0.5, 0.70, 0.50, 0.92, 1,
-    0.5, -0.5, 0.5, 0.70, 0.50, 0.92, 1,
+    -.5, .5, .5, // v0
+    -.5, -.5, .5, // v1
+    .5, -.5, .5, // v2
+    .5, .5, .5, // v3
+    .5, .5, -.5, // v4
+    .5, -.5, -.5, // v5
+    -.5, -.5, -.5, // v6
+    -.5, .5, -.5,  // v7
   ])
   const byte = vertices.BYTES_PER_ELEMENT
 
   indices = new Uint8Array([
-    0, 1, 2, 0, 2, 3,
-    4, 5, 6, 4, 6, 7,
-    8, 9, 10, 8, 10, 11,
-    12, 13, 14, 12, 14, 15,
-    16, 17, 18, 16, 18, 19,
-    20, 21, 22, 20, 22, 23
+    0, 1, 2, 3, // 前
+    3, 2, 5, 4, // 右
+    4, 5, 6, 7, // 后
+    0, 1, 6, 7, // 左
+    0, 3, 4, 7, // 上
+    6, 1, 2, 5, // 下
   ])
 
   const indexBuffer = gl.createBuffer()
@@ -122,13 +96,11 @@ const initGl = () => {
   gl.enable(gl.DEPTH_TEST)
 
   // 顶点坐标
-  createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Position, 3, byte * 7, 0)
-  // 颜色值
-  createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Color, 4, byte * 7, byte * 3)
+  createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Position, 3, 0, 0)
 
   gl.clearColor(0., 0., 0., .9)
   gl.clear(gl.COLOR_BUFFER_BIT)
-  gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_BYTE, 0)
+  gl.drawElements(gl.LINE_STRIP, indices.length, gl.UNSIGNED_BYTE, 0)
 }
 
 onMounted(() => {
@@ -140,6 +112,6 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Fifth1_2'
+  name: 'Fifth2_1'
 })
 </script>
