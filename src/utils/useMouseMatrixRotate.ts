@@ -11,8 +11,7 @@ export function useMouseMatrixRotate (baseRotateX = 0, baseRotateY = 0) {
     if (!canDrag.value) return
     const moveX = (mousedownX - e.offsetX + baseRotateX) % 360
     const moveY = (mousedownY - e.offsetY + baseRotateY) % 360
-    console.log('moveX', moveX)
-    console.log('moveY', moveY)
+
     const matrixX = new Matrix4()
     const matrixY = new Matrix4()
     const radianX = moveX * Math.PI / 180
@@ -21,7 +20,7 @@ export function useMouseMatrixRotate (baseRotateX = 0, baseRotateY = 0) {
     matrixY.makeRotationX(radianY)
     matrixX.multiply(matrixY)
     gl.uniformMatrix4fv(u_ModelMatrix, false, matrixX.elements)
-    gl.clear(gl.COLOR_BUFFER_BIT)
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
     gl.drawElements(gl[mode], indices.length, gl.UNSIGNED_BYTE, 0)
   }
 
