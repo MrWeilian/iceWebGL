@@ -3,6 +3,7 @@
   "description": "示例程序",
   "author": "",
   "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
     "@ice-webgl/utils": "workspace:*",
     "element-plus": "^2.3.4",
     "three": "^0.153.0"
