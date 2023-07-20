@@ -38,7 +38,7 @@ const fragmentCode = `
   }
 `
 
-let gl, a_Position, canvas, a_Color, program, u_ModelMatrix, indices
+let gl, a_Position, canvas, program, u_ModelMatrix, indices
 
 let baseRotateX = 70
 let baseRotateY = -30
@@ -59,7 +59,6 @@ const initGl = () => {
   program = createProgram(gl, vertexShader, fragmentShader)
 
   a_Position = gl.getAttribLocation(program, 'a_Position')
-  a_Color = gl.getAttribLocation(program, 'a_Color')
   u_ModelMatrix = gl.getUniformLocation(program, 'u_ModelMatrix')
   const matrix = new Matrix4()
   const radian = baseRotateX % 360 * Math.PI / 180
@@ -79,7 +78,6 @@ const initGl = () => {
     -.5, -.5, -.5, // v6
     -.5, .5, -.5,  // v7
   ])
-  const byte = vertices.BYTES_PER_ELEMENT
 
   indices = new Uint8Array([
     0, 1, 2, 3, // 前
