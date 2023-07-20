@@ -3,6 +3,7 @@ import Fifth1_2 from './1_2.vue'
 import Fifth2_1 from './2_1.vue'
 import Fifth2_2 from './2_2.vue'
 import Fifth3_1 from './3_1.vue'
+import Fifth3_2 from './3_2.vue'
 
 export const fifthComponents = [
   Fifth1_1,
@@ -10,4 +11,5 @@ export const fifthComponents = [
   Fifth2_1,
   Fifth2_2,
   Fifth3_1,
+  Fifth3_2,
 ]

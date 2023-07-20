@@ -11,7 +11,7 @@
 
 
   <canvas
-      id="ice-3_1"
+      id="ice-3_2"
       width="600"
       height="400"
   />
@@ -64,7 +64,7 @@ const target = new Vector3(0, 0, -1)
 const up = new Vector3(0, 1, 0)
 
 const initGl = () => {
-  gl = createGl('#ice-3_1')
+  gl = createGl('#ice-3_2')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -74,8 +74,16 @@ const initGl = () => {
   a_Position = gl.getAttribLocation(program, 'a_Position')
   a_Color = gl.getAttribLocation(program, 'a_Color')
   u_ViewMatrix = gl.getUniformLocation(program, 'u_ViewMatrix')
-  const matrix = new Matrix4()
-  matrix.lookAt(camera, target, up)
+  const matrix = new Matrix4( 
+    0, 0, 0, 0,
+    0, 0, 1, 0,
+    0, -1, 0, 0,
+    0, 0, 0, 1,
+  )
+  // matrix.lookAt(camera, target, up)
+  // matrix.invert()
+  console.log(11, matrix.elements);
+  
   gl.uniformMatrix4fv(u_ViewMatrix, false, matrix.elements)
 
   const vertices = new Float32Array([
@@ -177,7 +185,7 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Fifth3_1'
+  name: 'Fifth3_2'
 })
 </script>
 
@@ -192,7 +200,7 @@ export default defineComponent({
     padding: 4px;
   }
 }
-#ice-3_1 {
+#ice-3_2 {
   margin: 16px auto 0;
 }
 </style>
