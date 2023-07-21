@@ -74,14 +74,8 @@ const initGl = () => {
   a_Position = gl.getAttribLocation(program, 'a_Position')
   a_Color = gl.getAttribLocation(program, 'a_Color')
   u_ViewMatrix = gl.getUniformLocation(program, 'u_ViewMatrix')
-  const matrix = new Matrix4( 
-    0, 0, 0, 0,
-    0, 0, 1, 0,
-    0, -1, 0, 0,
-    0, 0, 0, 1,
-  )
-  // matrix.lookAt(camera, target, up)
-  // matrix.invert()
+  const matrix = new Matrix4( )
+  matrix.lookAt(camera, target, up)
   console.log(11, matrix.elements);
   
   gl.uniformMatrix4fv(u_ViewMatrix, false, matrix.elements)
