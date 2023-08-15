@@ -36,7 +36,7 @@ import {
 } from '@element-plus/icons-vue'
 import { Matrix4, Vector3 } from '../cuon-matrix'
 
-const MOVE = 0.2
+const MOVE = 0.1
 
 const transformation = [
   { label: '平移', value: 'translate' },
@@ -90,17 +90,17 @@ const initGl = () => {
 
   const vertices = new Float32Array([
     // 绿
-    0, 0.5, 0.5, 0.45, 0.82, 0.24, 1,
-    -0.5, -0.5, 0.5, 0.45, 0.82, 0.24, 1,
-    0.5, -0.5, 0.5, 0.45, 0.82, 0.24, 1,
+    0, 0.5, -0.2, 0.45, 0.82, 0.24, 1,
+    -0.5, -0.5, -0.2, 0.45, 0.82, 0.24, 1,
+    0.5, -0.5, -0.2, 0.45, 0.82, 0.24, 1,
     // 蓝
-    0, 0.5, 0, 0.086, 0.53, 1, 1,
-    -0.5, -0.5, 0, 0.086, 0.53, 1, 1,
-    0.5, -0.5, 0, 0.086, 0.53, 1, 1,
+    0, 0.5, -0.4, 0.086, 0.53, 1, 1,
+    -0.5, -0.5, -0.4, 0.086, 0.53, 1, 1,
+    0.5, -0.5, -0.4, 0.086, 0.53, 1, 1,
     // 橙
-    0, 0.5, -0.5, 0.98, 0.68, 0.078, 1,
-    -0.5, -0.5, -0.5, 0.98, 0.68, 0.078, 1,
-    0.5, -0.5, -0.5, 0.98, 0.68, 0.078, 1,
+    0, 0.5, -0.6, 0.98, 0.68, 0.078, 1,
+    -0.5, -0.5, -0.6, 0.98, 0.68, 0.078, 1,
+    0.5, -0.5, -0.6, 0.98, 0.68, 0.078, 1,
   ])
   const byte = vertices.BYTES_PER_ELEMENT
 
@@ -116,6 +116,7 @@ const initGl = () => {
 
 const reDrawCamera = () => {
   const matrix = new Matrix4()
+
   matrix.lookAt.apply(matrix, [...camera, ...target, ...up])
 
   gl.uniformMatrix4fv(u_ViewMatrix, false, matrix.elements)
@@ -128,7 +129,7 @@ const handleUp = () => {
   if (transformType.value === 'translate') {
     target[1] = camera[1] += MOVE
   } else {
-
+    camera[1] += MOVE
   }
 
   reDrawCamera()
@@ -138,7 +139,7 @@ const handleDown = () => {
   if (transformType.value === 'translate') {
     target[1] = camera[1] -= MOVE
   } else {
-
+    camera[1] -= MOVE
   }
   reDrawCamera()
 }
@@ -147,7 +148,7 @@ const handleLeft = () => {
   if (transformType.value === 'translate') {
     target[0] = camera[0] -= MOVE
   } else {
-
+    camera[0] -= MOVE
   }
   reDrawCamera()
 }
@@ -156,7 +157,7 @@ const handleRight = () => {
   if (transformType.value === 'translate') {
     target[0] = camera[0] += MOVE
   } else {
-
+    camera[0] += MOVE
   }
   reDrawCamera()
 }
