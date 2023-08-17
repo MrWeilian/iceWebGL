@@ -13,7 +13,7 @@
   </div>
 
   <canvas
-      id="ice-4_1"
+      id="ice-5_1"
       width="600"
       height="400"
   />
@@ -35,7 +35,9 @@ import {
   ArrowRight
 } from '@element-plus/icons-vue'
 import { Matrix4, Vector3 } from '../cuon-matrix'
-
+import ViewMatrix from '../matrix/ViewMatrix'
+const matrixtest = new ViewMatrix()
+matrixtest.lookAt(0, 0, 0, 0, 0, -1, 0, 1,0)
 const MOVE = 0.1
 
 const transformation = [
@@ -73,7 +75,7 @@ const target = [0, 0, -1]
 const up = [0, 1, 0]
 
 const initGl = () => {
-  gl = createGl('#ice-4_1')
+  gl = createGl('#ice-5_1')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -171,7 +173,7 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Fifth4_1'
+  name: 'Fifth5_1'
 })
 </script>
 
@@ -186,7 +188,7 @@ export default defineComponent({
     padding: 4px;
   }
 }
-#ice-4_1 {
+#ice-5_1 {
   margin: 16px auto 0;
 }
 </style>
