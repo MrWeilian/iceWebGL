@@ -566,3 +566,79 @@ export class Mat4
     return this;
   }
 }
+
+
+// class ViewMatrix {
+//   static identity(out = []) {
+//     return Object.assign(out, [
+//       1, 0, 0, 0,
+//       0, 1, 0, 0,
+//       0, 0, 1, 0,
+//       0, 0, 0, 1
+//     ])
+//   }
+//
+//   static lookAt(eye, target, up, out = []) {
+//     const eyeX = eye[0], eyeY = eye[1], eyeZ = eye[2];
+//     const upX = up[0], upY = up[1], upZ = up[2];
+//     const targetX = target[0], targetY = target[1], targetZ = target[2];
+//     let x0, x1, x2, y0, y1, y2, z0, z1, z2, len;
+//
+//     // 相机 Z 轴
+//     z0 = eyeX - targetX;
+//     z1 = eyeY - targetY;
+//     z2 = eyeZ - targetZ;
+//     // 归一化 Z 轴
+//     len = z0 * z0 + z1 * z1 + z2 * z2
+//     if (len > 0) {
+//       len = 1 / Math.sqrt(len)
+//       z0 *= len;
+//       z1 *= len;
+//       z2 *= len;
+//     } else {
+//       // 相机和目标在同一位置
+//       return ViewMatrix.identity(out)
+//     }
+//
+//     // 叉积 up 和 Z 轴，求出 X 轴
+//     x0 = upY * z2 - upZ * z1;
+//     x1 = upZ * z0 - upX * z2;
+//     x2 = upX * z1 - upY * z0;
+//     // 归一化 X 轴
+//     len = x0 * x0 + x1 * x1 + x2 * x2;
+//     if (len > 0) {
+//       len = 1 / Math.sqrt(len);
+//       x0 *= len;
+//       x1 *= len;
+//       x2 *= len;
+//     } else {
+//       // up 与 Z 平行
+//       return ViewMatrix.identity(out)
+//     }
+//
+//     // Z 叉乘 X，求出 Y 轴
+//     y0 = z1 * x2 - z2 * x1;
+//     y1 = z2 * x0 - z0 * x2;
+//     y2 = z0 * x1 - z1 * x0;
+//
+//     // OpenGL 中矩阵是列主序
+//     out[0] = x0;
+//     out[1] = y0;
+//     out[2] = z0;
+//     out[3] = 0;
+//     out[4] = x1;
+//     out[5] = y1;
+//     out[6] = z1;
+//     out[7] = 0;
+//     out[8] = x2;
+//     out[9] = y2;
+//     out[10] = z2;
+//     out[11] = 0;
+//     out[12] = -(x0 * eyeX + x1 * eyeY + x2 * eyeZ);
+//     out[13] = -(y0 * eyeY + y1 * eyeY + y2 * eyeZ);
+//     out[14] = -(z0 * eyeZ + z1 * eyeY + z2 * eyeZ);
+//     out[15] = 1;
+//
+//     return out;
+//   }
+// }

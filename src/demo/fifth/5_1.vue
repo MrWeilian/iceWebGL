@@ -36,8 +36,7 @@ import {
 } from '@element-plus/icons-vue'
 import { Matrix4, Vector3 } from '../cuon-matrix'
 import ViewMatrix from '../matrix/ViewMatrix'
-const matrixtest = new ViewMatrix()
-matrixtest.lookAt(0, 0, 0, 0, 0, -1, 0, 1,0)
+
 const MOVE = 0.1
 
 const transformation = [
@@ -85,24 +84,25 @@ const initGl = () => {
   a_Position = gl.getAttribLocation(program, 'a_Position')
   a_Color = gl.getAttribLocation(program, 'a_Color')
   u_ViewMatrix = gl.getUniformLocation(program, 'u_ViewMatrix')
-  const matrix = new Matrix4()
+  const matrix = new ViewMatrix()
   matrix.lookAt.apply(matrix, [...camera, ...target, ...up])
 
+  console.log(111, matrix.elements);
   gl.uniformMatrix4fv(u_ViewMatrix, false, matrix.elements)
 
   const vertices = new Float32Array([
     // 绿
-    0, 0.5, -0.2, 0.45, 0.82, 0.24, 1,
-    -0.5, -0.5, -0.2, 0.45, 0.82, 0.24, 1,
-    0.5, -0.5, -0.2, 0.45, 0.82, 0.24, 1,
+    0, 0.6, 0.2, 0.45, 0.82, 0.24, 1,
+    -0.5, -0.4, 0.2, 0.45, 0.82, 0.24, 1,
+    0.5, -0.4, 0.2, 0.45, 0.82, 0.24, 1,
     // 蓝
-    0, 0.5, -0.4, 0.086, 0.53, 1, 1,
-    -0.5, -0.5, -0.4, 0.086, 0.53, 1, 1,
-    0.5, -0.5, -0.4, 0.086, 0.53, 1, 1,
+    0, 0.5, 0.4, 0.086, 0.53, 1, 1,
+    -0.5, -0.5, 0.4, 0.086, 0.53, 1, 1,
+    0.5, -0.5, 0.4, 0.086, 0.53, 1, 1,
     // 橙
-    0, 0.5, -0.6, 0.98, 0.68, 0.078, 1,
-    -0.5, -0.5, -0.6, 0.98, 0.68, 0.078, 1,
-    0.5, -0.5, -0.6, 0.98, 0.68, 0.078, 1,
+    // 0, 0.5, -0.6, 0.98, 0.68, 0.078, 1,
+    // -0.5, -0.5, -0.6, 0.98, 0.68, 0.078, 1,
+    // 0.5, -0.5, -0.6, 0.98, 0.68, 0.078, 1,
   ])
   const byte = vertices.BYTES_PER_ELEMENT
 
@@ -113,15 +113,17 @@ const initGl = () => {
   createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Color, 4, byte * 7, byte * 3)
   gl.clearColor(0., 0., 0., .9)
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-  gl.drawArrays(gl.TRIANGLES, 0, 9)
+  gl.drawArrays(gl.TRIANGLES, 0, 6)
 }
 
 const reDrawCamera = () => {
-  const matrix = new Matrix4()
+  const matrix = new ViewMatrix()
+  // matrix.lookAt(0, 0, 0, 0, 0, -1, 0, 1,0)
+  // const matrix = new Matrix4()
 
-  matrix.lookAt.apply(matrix, [...camera, ...target, ...up])
+  // matrix.lookAt.apply(matrix, [...camera, ...target, ...up])
 
-  gl.uniformMatrix4fv(u_ViewMatrix, false, matrix.elements)
+  // gl.uniformMatrix4fv(u_ViewMatrix, false, matrix.elements)
   gl.enable(gl.DEPTH_TEST)
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
   gl.drawArrays(gl.TRIANGLES, 0, 9)
