@@ -34,14 +34,14 @@ import {
   ArrowLeft,
   ArrowRight
 } from '@element-plus/icons-vue'
-import { Matrix4, Vector3 } from '../cuon-matrix'
+// import { Matrix4 as ViewMatrix, Vector3 } from '../cuon-matrix'
 import ViewMatrix from '../matrix/ViewMatrix'
 
-const MOVE = 0.1
+const MOVE = 0.2
 
 const transformation = [
-  { label: '平移', value: 'translate' },
-  { label: '旋转', value: 'rotate' },
+  { label: '改变相机和观察点位置', value: 'translate' },
+  { label: '仅改变相机位置', value: 'rotate' },
 ]
 
 const transformType = ref('translate')
@@ -92,46 +92,42 @@ const initGl = () => {
 
   const vertices = new Float32Array([
     // 绿
-    0, 0.6, 0.2, 0.45, 0.82, 0.24, 1,
-    -0.5, -0.4, 0.2, 0.45, 0.82, 0.24, 1,
-    0.5, -0.4, 0.2, 0.45, 0.82, 0.24, 1,
+    0, 0.6, -0.6, 0.45, 0.82, 0.24, 1,
+    -0.5, -0.4, -0.6, 0.45, 0.82, 0.24, 1,
+    0.5, -0.4, -0.6, 0.45, 0.82, 0.24, 1,
     // 蓝
-    0, 0.5, 0.4, 0.086, 0.53, 1, 1,
-    -0.5, -0.5, 0.4, 0.086, 0.53, 1, 1,
-    0.5, -0.5, 0.4, 0.086, 0.53, 1, 1,
+    0, 0.5, -0.4, 0.086, 0.53, 1, 1,
+    -0.5, -0.5, -0.4, 0.086, 0.53, 1, 1,
+    0.5, -0.5, -0.4, 0.086, 0.53, 1, 1,
     // 橙
-    // 0, 0.5, -0.6, 0.98, 0.68, 0.078, 1,
-    // -0.5, -0.5, -0.6, 0.98, 0.68, 0.078, 1,
-    // 0.5, -0.5, -0.6, 0.98, 0.68, 0.078, 1,
+    0, 0.4, -0.2, 0.98, 0.68, 0.078, 1,
+    -0.5, -0.6, -0.2, 0.98, 0.68, 0.078, 1,
+    0.5, -0.6, -0.2, 0.98, 0.68, 0.078, 1,
   ])
   const byte = vertices.BYTES_PER_ELEMENT
 
-  gl.enable(gl.DEPTH_TEST)
   // 顶点坐标
   createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Position, 3, byte * 7, 0)
   // 颜色值
   createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Color, 4, byte * 7, byte * 3)
   gl.clearColor(0., 0., 0., .9)
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-  gl.drawArrays(gl.TRIANGLES, 0, 6)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+  gl.drawArrays(gl.TRIANGLES, 0, 9)
 }
 
 const reDrawCamera = () => {
   const matrix = new ViewMatrix()
-  // matrix.lookAt(0, 0, 0, 0, 0, -1, 0, 1,0)
-  // const matrix = new Matrix4()
+  matrix.lookAt.apply(matrix, [...camera, ...target, ...up])
+  gl.uniformMatrix4fv(u_ViewMatrix, false, matrix.elements)
 
-  // matrix.lookAt.apply(matrix, [...camera, ...target, ...up])
-
-  // gl.uniformMatrix4fv(u_ViewMatrix, false, matrix.elements)
-  gl.enable(gl.DEPTH_TEST)
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+  gl.clear(gl.COLOR_BUFFER_BIT)
   gl.drawArrays(gl.TRIANGLES, 0, 9)
 }
 
 const handleUp = () => {
   if (transformType.value === 'translate') {
-    target[1] = camera[1] += MOVE
+    target[1] += MOVE
+    camera[1] += MOVE
   } else {
     camera[1] += MOVE
   }
@@ -141,7 +137,8 @@ const handleUp = () => {
 
 const handleDown = () => {
   if (transformType.value === 'translate') {
-    target[1] = camera[1] -= MOVE
+    target[1] -= MOVE
+    camera[1] -= MOVE
   } else {
     camera[1] -= MOVE
   }
@@ -150,7 +147,8 @@ const handleDown = () => {
 
 const handleLeft = () => {
   if (transformType.value === 'translate') {
-    target[0] = camera[0] -= MOVE
+    target[0] -= MOVE
+    camera[0] -= MOVE
   } else {
     camera[0] -= MOVE
   }
@@ -159,7 +157,8 @@ const handleLeft = () => {
 
 const handleRight = () => {
   if (transformType.value === 'translate') {
-    target[0] = camera[0] += MOVE
+    target[0] += MOVE
+    camera[0] += MOVE
   } else {
     camera[0] += MOVE
   }
