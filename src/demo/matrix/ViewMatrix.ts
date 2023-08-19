@@ -25,7 +25,7 @@ class ViewMatrix implements TViewMatrix{
   }
 
   lookAt (cX: number, cY: number, cZ: number, tX: number, tY: number, tZ: number, uX: number, uY: number, uZ: number) {
-    let xX, xY, xZ, yX, yY, yZ, zX, zY, zZ, xToNormal, yToNormal, zToNormal
+    let xX, xY, xZ, yX, yY, yZ, zX, zY, zZ, xToNormal, zToNormal
 
     zX = tX - cX
     zY = tY - cY
