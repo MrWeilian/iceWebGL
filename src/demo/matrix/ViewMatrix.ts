@@ -27,22 +27,23 @@ class ViewMatrix implements TViewMatrix{
   lookAt (cX: number, cY: number, cZ: number, tX: number, tY: number, tZ: number, uX: number, uY: number, uZ: number) {
     let xX, xY, xZ, yX, yY, yZ, zX, zY, zZ, xToNormal, zToNormal
 
+    // 求 Z 轴
     zX = tX - cX
     zY = tY - cY
     zZ = tZ - cZ
-    zToNormal = Math.sqrt(zX * zX + zY * zY + zZ * zZ)
-    zX /= zToNormal
-    zY /= zToNormal
-    zZ /= zToNormal
+    zToNormal = 1/ Math.sqrt(zX * zX + zY * zY + zZ * zZ)
+    zX *= zToNormal
+    zY *= zToNormal
+    zZ *= zToNormal
 
-    // Z x U
+    // 叉乘求 X 轴
     xX = zY * uZ - zZ * uY
     xY = zZ * uX - zX * uZ
     xZ = zX * uY - zY * uX
-    xToNormal = Math.sqrt(xX * xX + xY * xY + xZ * xZ)
-    xX /= xToNormal
-    xY /= xToNormal
-    xZ /= xToNormal
+    xToNormal = 1/ Math.sqrt(xX * xX + xY * xY + xZ * xZ)
+    xX *= xToNormal
+    xY *= xToNormal
+    xZ *= xToNormal
 
     yX = zZ * xY - zY * xZ
     yY = zX * xZ - zZ * xX
@@ -60,17 +61,15 @@ class ViewMatrix implements TViewMatrix{
     e[9] = yZ
     e[10] = -zZ
 
-    console.log('lookAt', e)
     this.translate(-cX, -cY, -cZ)
   }
 
   translate (cX: number, cY: number, cZ: number) {
     const e = this.elements
 
-    e[12] += e[0] * cX + e[4] * cY + e[8] * cZ;
-    e[13] += e[1] * cX + e[5] * cY + e[9] * cZ;
-    e[14] += e[2] * cX + e[6] * cY + e[10] * cZ;
-    e[15] += e[3] * cX + e[7] * cY + e[11] * cZ;
+    e[12] += e[0] * cX + e[4] * cY + e[8] * cZ
+    e[13] += e[1] * cX + e[5] * cY + e[9] * cZ
+    e[14] += e[2] * cX + e[6] * cY + e[10] * cZ
   }
 }
 
