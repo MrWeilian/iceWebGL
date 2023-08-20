@@ -40,7 +40,7 @@ import ViewMatrix from '../matrix/ViewMatrix'
 const MOVE = 0.2
 
 const transformation = [
-  { label: '改变相机和观察点位置', value: 'translate' },
+  { label: '同时改变相机和观察点位置', value: 'translate' },
   { label: '仅改变相机位置', value: 'rotate' },
 ]
 
@@ -87,7 +87,6 @@ const initGl = () => {
   const matrix = new ViewMatrix()
   matrix.lookAt.apply(matrix, [...camera, ...target, ...up])
 
-  console.log(111, matrix.elements);
   gl.uniformMatrix4fv(u_ViewMatrix, false, matrix.elements)
 
   const vertices = new Float32Array([

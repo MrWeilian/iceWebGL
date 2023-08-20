@@ -2,14 +2,14 @@ interface TLookAt {
   (cX: number, cY: number, cZ: number, tX: number, tY: number, tZ: number, uX: number, uY: number, uZ: number): void
 }
 
-interface TTranslate {
+interface TMultipleTranslateMatrix {
   (cX: number, cY: number, cZ: number): void
 }
 
 interface TViewMatrix {
   elements: number[]
   lookAt: TLookAt
-  translate: TTranslate
+  multipleTranslateMatrix: TMultipleTranslateMatrix
 }
 
 class ViewMatrix implements TViewMatrix{
@@ -61,10 +61,10 @@ class ViewMatrix implements TViewMatrix{
     e[9] = yZ
     e[10] = -zZ
 
-    this.translate(-cX, -cY, -cZ)
+    this.multipleTranslateMatrix(-cX, -cY, -cZ)
   }
 
-  translate (cX: number, cY: number, cZ: number) {
+  multipleTranslateMatrix (cX: number, cY: number, cZ: number) {
     const e = this.elements
 
     e[12] += e[0] * cX + e[4] * cY + e[8] * cZ
