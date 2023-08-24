@@ -34,7 +34,6 @@ import {
   ArrowLeft,
   ArrowRight
 } from '@element-plus/icons-vue'
-// import { Matrix4 as ViewMatrix, Vector3 } from '../cuon-matrix'
 import ViewMatrix from '../matrix/ViewMatrix'
 
 const MOVE = 0.2
