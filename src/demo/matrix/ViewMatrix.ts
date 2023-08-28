@@ -7,21 +7,21 @@ interface TMultipleTranslateMatrix {
 }
 
 interface TViewMatrix {
-  elements: number[]
+  elements: Float32Array
   lookAt: TLookAt
   multipleTranslateMatrix: TMultipleTranslateMatrix
 }
 
 class ViewMatrix implements TViewMatrix{
-  elements: number[]
+  elements: Float32Array
 
   constructor () {
-    this.elements = [
+    this.elements = new Float32Array([
       1, 0, 0, 0,
       0, 1, 0, 0,
       0, 0, 1, 0,
       0, 0, 0, 1
-    ]
+    ])
   }
 
   lookAt (cX: number, cY: number, cZ: number, tX: number, tY: number, tZ: number, uX: number, uY: number, uZ: number) {

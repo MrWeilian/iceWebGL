@@ -35,6 +35,7 @@ import {
   ArrowRight
 } from '@element-plus/icons-vue'
 import ViewMatrix from '../matrix/ViewMatrix'
+import OrthographicMatrix from '../matrix/OrthographicMatrix';
 
 const MOVE = 0.2
 
@@ -49,10 +50,11 @@ const vertexCode = `
   attribute vec4 a_Position;
   attribute vec4 a_Color;
   varying vec4 v_Color;
+  uniform mat4 u_OrthographicMatrix;
   uniform mat4 u_ViewMatrix;
 
   void main () {
-    gl_Position = u_ViewMatrix * a_Position;
+    gl_Position = u_OrthographicMatrix * u_ViewMatrix * a_Position;
     v_Color= a_Color;
   }
 `
@@ -66,7 +68,7 @@ const fragmentCode = `
   }
 `
 
-let gl, a_Position, canvas, a_Color, program, u_ViewMatrix
+let gl, a_Position, canvas, a_Color, program, u_ViewMatrix, u_OrthographicMatrix
 
 const camera = [0, 0, 0]
 const target = [0, 0, -1]
@@ -82,11 +84,16 @@ const initGl = () => {
 
   a_Position = gl.getAttribLocation(program, 'a_Position')
   a_Color = gl.getAttribLocation(program, 'a_Color')
-  u_ViewMatrix = gl.getUniformLocation(program, 'u_ViewMatrix')
-  const matrix = new ViewMatrix()
-  matrix.lookAt.apply(matrix, [...camera, ...target, ...up])
 
-  gl.uniformMatrix4fv(u_ViewMatrix, false, matrix.elements)
+  u_ViewMatrix = gl.getUniformLocation(program, 'u_ViewMatrix')
+  const viewMatrix = new ViewMatrix()
+  viewMatrix.lookAt.apply(viewMatrix, [...camera, ...target, ...up])
+  gl.uniformMatrix4fv(u_ViewMatrix, false, viewMatrix.elements)
+
+  u_OrthographicMatrix = gl.getUniformLocation(program, 'u_OrthographicMatrix')
+  const orthographicMatrix = new OrthographicMatrix()
+  orthographicMatrix.setOrthographicPosition(-2, 2, 2, -2, -2, 2)
+  gl.uniformMatrix4fv(u_OrthographicMatrix, false, orthographicMatrix.elements)
 
   const vertices = new Float32Array([
     // 绿
