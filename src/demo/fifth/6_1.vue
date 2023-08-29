@@ -1,7 +1,12 @@
 <template>
-  <el-radio-group v-model="transformType">
-    <el-radio v-for="item in transformation" :label="item.value" size="large">{{ item.label }}</el-radio>
-  </el-radio-group>
+  <div class="form">
+    <el-radio-group v-model="transformType">
+      <el-radio v-for="item in transformation" :label="item.value" size="large">{{ item.label }}</el-radio>
+    </el-radio-group>
+    <el-select v-model="orthographicInterval" placeholder="设置正交投影区间" @change="resetOrthographic">
+      <el-option v-for="(item, index) in interval" :label="`投影可视区间：${item}`" :value="index + 1" />
+    </el-select>
+  </div>
   <div class="box">
     <el-icon class="icon" @click="handleUp"><ArrowUp /></el-icon>
     <div class="mid">
@@ -37,6 +42,8 @@ import {
 import ViewMatrix from '../matrix/ViewMatrix'
 import OrthographicMatrix from '../matrix/OrthographicMatrix';
 
+const interval = ['[-1, 1]', '[-2, 2]', '[-3, 3]'] as const
+
 const MOVE = 0.2
 
 const transformation = [
@@ -45,6 +52,7 @@ const transformation = [
 ]
 
 const transformType = ref('translate')
+const orthographicInterval = ref(1)
 
 const vertexCode = `
   attribute vec4 a_Position;
@@ -92,22 +100,21 @@ const initGl = () => {
 
   u_OrthographicMatrix = gl.getUniformLocation(program, 'u_OrthographicMatrix')
   const orthographicMatrix = new OrthographicMatrix()
-  orthographicMatrix.setOrthographicPosition(-2, 2, 2, -2, -2, 2)
   gl.uniformMatrix4fv(u_OrthographicMatrix, false, orthographicMatrix.elements)
 
   const vertices = new Float32Array([
     // 绿
-    0, 0.6, -0.6, 0.45, 0.82, 0.24, 1,
-    -0.5, -0.4, -0.6, 0.45, 0.82, 0.24, 1,
-    0.5, -0.4, -0.6, 0.45, 0.82, 0.24, 1,
+    0, 1.6, -0.6, 0.45, 0.82, 0.24, 1,
+    -1.5, -1.4, -0.6, 0.45, 0.82, 0.24, 1,
+    1.5, -1.4, -0.6, 0.45, 0.82, 0.24, 1,
     // 蓝
-    0, 0.5, -0.4, 0.086, 0.53, 1, 1,
-    -0.5, -0.5, -0.4, 0.086, 0.53, 1, 1,
-    0.5, -0.5, -0.4, 0.086, 0.53, 1, 1,
+    0, 1.5, -0.4, 0.086, 0.53, 1, 1,
+    -1.5, -1.5, -0.4, 0.086, 0.53, 1, 1,
+    1.5, -1.5, -0.4, 0.086, 0.53, 1, 1,
     // 橙
-    0, 0.4, -0.2, 0.98, 0.68, 0.078, 1,
-    -0.5, -0.6, -0.2, 0.98, 0.68, 0.078, 1,
-    0.5, -0.6, -0.2, 0.98, 0.68, 0.078, 1,
+    0, 1.4, -0.2, 0.98, 0.68, 0.078, 1,
+    -1.5, -1.6, -0.2, 0.98, 0.68, 0.078, 1,
+    1.5, -1.6, -0.2, 0.98, 0.68, 0.078, 1,
   ])
   const byte = vertices.BYTES_PER_ELEMENT
 
@@ -170,6 +177,16 @@ const handleRight = () => {
   reDrawCamera()
 }
 
+const resetOrthographic = (value) => {
+  u_OrthographicMatrix = gl.getUniformLocation(program, 'u_OrthographicMatrix')
+  const orthographicMatrix = new OrthographicMatrix()
+  orthographicMatrix.setOrthographicPosition(-value, value, value, -value, -value, value)
+  gl.uniformMatrix4fv(u_OrthographicMatrix, false, orthographicMatrix.elements)
+
+  gl.clear(gl.COLOR_BUFFER_BIT)
+  gl.drawArrays(gl.TRIANGLES, 0, 9)
+}
+
 onMounted(() => {
   initGl()
 })
@@ -184,6 +201,11 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+.form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .box {
   text-align: center;
   font-size: 18px;

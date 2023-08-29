@@ -159,6 +159,7 @@ $menu-height: 32px;
   font-size: 14px;
   .decode {
     padding: 0 16px;
+    overflow: auto;
   }
   .hide-code-btn {
     border-top: 1px solid var(--vp-custom-block-details-border);

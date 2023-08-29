@@ -7,7 +7,6 @@ interface TOrthographicMatrix {
   setOrthographicPosition: TSetPosition
 }
 
-
 class OrthographicMatrix implements TOrthographicMatrix {
   elements: Float32Array
 
