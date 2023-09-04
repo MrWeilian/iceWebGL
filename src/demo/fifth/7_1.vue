@@ -32,7 +32,9 @@ import OrthographicMatrix from '../matrix/OrthographicMatrix'
 
 const interval = ['[-1, 1]', '[-2, 2]', '[-3, 3]'] as const
 
-const MOVE = 0.2
+const fov = 30
+const near = 1
+const far = 10
 
 const transformation = [
   { label: '透视投影', value: 'perspective' },
@@ -66,8 +68,8 @@ const fragmentCode = `
 
 let gl, a_Position, canvas, a_Color, program, u_ViewMatrix, u_PerspectiveMatrix
 
-const camera = [0, 0, 3]
-const target = [0, 0, -1]
+const camera = [0, 0, 1]
+const target = [0, 0, -100]
 const up = [0, 1, 0]
 
 const initGl = () => {
@@ -88,8 +90,7 @@ const initGl = () => {
 
   u_PerspectiveMatrix = gl.getUniformLocation(program, 'u_PerspectiveMatrix')
   const perspectiveMatrix = new PerspectiveMatrix()
-  perspectiveMatrix.setPerspective(30, gl.canvas.clientWidth / gl.canvas.clientHeight, 1, 100)
-  console.log('perspectiveMatrix', perspectiveMatrix.elements);
+  perspectiveMatrix.setPerspective(fov, gl.canvas.clientWidth / gl.canvas.clientHeight, near, far)
   gl.uniformMatrix4fv(u_PerspectiveMatrix, false, perspectiveMatrix.elements)
 
   const vertices = new Float32Array([
@@ -121,11 +122,11 @@ watch(transformType, type => {
   u_PerspectiveMatrix = gl.getUniformLocation(program, 'u_PerspectiveMatrix')
   if (type === 'perspective') {
     const perspectiveMatrix = new PerspectiveMatrix()
-    perspectiveMatrix.setPerspective(30, gl.canvas.clientWidth / gl.canvas.clientHeight, 1, 100)
+    perspectiveMatrix.setPerspective(fov, gl.canvas.clientWidth / gl.canvas.clientHeight, near, far)
     gl.uniformMatrix4fv(u_PerspectiveMatrix, false, perspectiveMatrix.elements)
   } else {
     const orthographicMatrix = new OrthographicMatrix()
-    orthographicMatrix.setOrthographicPosition(-1, 1, 1, -1, -5, 5)
+    orthographicMatrix.setOrthographicPosition(-2, 2, 1, -1, -5, 5)
     gl.uniformMatrix4fv(u_PerspectiveMatrix, false, orthographicMatrix.elements)
   }
   gl.clear(gl.COLOR_BUFFER_BIT)
