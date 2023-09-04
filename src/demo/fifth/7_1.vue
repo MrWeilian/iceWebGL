@@ -100,26 +100,33 @@ const initGl = () => {
   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMatrix.elements)
 
   u_PerspectiveMatrix = gl.getUniformLocation(program, 'u_PerspectiveMatrix')
-  // const perspectiveMatrix = new PerspectiveMatrix()
-  const perspectiveMatrix = new Mat4()
-  // perspectiveMatrix.setPerspective(45 * Math.PI / 180, gl.canvas.clientWidth / gl.canvas.clientHeight, 1, 100)
+  const perspectiveMatrix = new PerspectiveMatrix()
   perspectiveMatrix.setPerspective(30, gl.canvas.clientWidth / gl.canvas.clientHeight, 1, 100)
   console.log('perspectiveMatrix', perspectiveMatrix.elements);
   gl.uniformMatrix4fv(u_PerspectiveMatrix, false, perspectiveMatrix.elements)
 
   const vertices = new Float32Array([
     // 绿
-    0, 0.8, -2, 0.45, 0.82, 0.24, 1,
-    -0.5, -0.2, -2, 0.45, 0.82, 0.24, 1,
-    0.5, -0.2, -2, 0.45, 0.82, 0.24, 1,
+    -.2, 0.8, -2, 0.45, 0.82, 0.24, 1,
+    -0.7, -0.2, -2, 0.45, 0.82, 0.24, 1,
+    0.3, -0.2, -2, 0.45, 0.82, 0.24, 1,
+    // -.2, 0.8, -1, 0.45, 0.82, 0.24, 1,
+    // -0.7, -0.2, -1, 0.45, 0.82, 0.24, 1,
+    // 0.3, -0.2, -1, 0.45, 0.82, 0.24, 1,
     // 蓝
-    0, 0.6, -1, 0.086, 0.53, 1, 1,
-    -0.5, -0.4, -1, 0.086, 0.53, 1, 1,
-    0.5, -0.4, -1, 0.086, 0.53, 1, 1,
+    -.1, 0.6, -1, 0.086, 0.53, 1, 1,
+    -0.6, -0.4, -1, 0.086, 0.53, 1, 1,
+    0.4, -0.4, -1, 0.086, 0.53, 1, 1,
+    // -.1, 0.6, -.8, 0.086, 0.53, 1, 1,
+    // -0.6, -0.4, -.8, 0.086, 0.53, 1, 1,
+    // 0.4, -0.4, -.8, 0.086, 0.53, 1, 1,
     // 橙
     0, 0.4, 0, 0.98, 0.68, 0.078, 1,
     -0.5, -0.6, 0, 0.98, 0.68, 0.078, 1,
     0.5, -0.6, 0, 0.98, 0.68, 0.078, 1,
+    // 0, 0.4, -0.6, 0.98, 0.68, 0.078, 1,
+    // -0.5, -0.6, -0.6, 0.98, 0.68, 0.078, 1,
+    // 0.5, -0.6, -0.6, 0.98, 0.68, 0.078, 1,
   ])
   const byte = vertices.BYTES_PER_ELEMENT
 
