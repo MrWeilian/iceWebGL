@@ -25,9 +25,9 @@ class PerspectiveMatrix implements TPerspectiveMatrix {
     const f = 1 / Math.tan(fov / 2)
     e[0] = f / aspect
     e[5] = f
-    e[10] = (near + far) / (near - far)
+    e[10] = -(near + far) / (far - near)
     e[11] = -1
-    e[14] = (2 * near * far) / (near - far)
+    e[14] = -(2 * near * far) / (far - near)
     e[15] = 0
   }
 }

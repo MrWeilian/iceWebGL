@@ -1,21 +1,7 @@
 <template>
-  <div class="form">
-    <el-radio-group v-model="transformType">
-      <el-radio v-for="item in transformation" :label="item.value" size="large">{{ item.label }}</el-radio>
-    </el-radio-group>
-    <el-select v-model="orthographicInterval" placeholder="设置正交投影区间" @change="resetOrthographic">
-      <el-option v-for="(item, index) in interval" :label="`投影可视区间：${item}`" :value="index + 1" />
-    </el-select>
-  </div>
-  <div class="box">
-    <el-icon class="icon" @click="handleUp"><ArrowUp /></el-icon>
-    <div class="mid">
-      <el-icon class="icon" @click="handleLeft"><ArrowLeft /></el-icon>
-      <el-icon class="icon"><Camera /></el-icon>
-      <el-icon class="icon" @click="handleRight"><ArrowRight /></el-icon>
-    </div>
-    <el-icon class="icon" @click="handleDown"><ArrowDown /></el-icon>
-  </div>
+  <el-radio-group v-model="transformType">
+    <el-radio v-for="item in transformation" :label="item.value">{{ item.label }}</el-radio>
+  </el-radio-group>
 
   <canvas
       id="ice-7_1"
@@ -42,17 +28,18 @@ import {
 import ViewMatrix from '../matrix/ViewMatrix'
 import PerspectiveMatrix from '../matrix/PerspectiveMatrix';
 import { Mat4 } from '../cuon-matrix/mat4';
+import OrthographicMatrix from '../matrix/OrthographicMatrix'
 
 const interval = ['[-1, 1]', '[-2, 2]', '[-3, 3]'] as const
 
 const MOVE = 0.2
 
 const transformation = [
-  { label: '同时改变相机和观察点位置', value: 'translate' },
-  { label: '仅改变相机位置', value: 'rotate' },
+  { label: '透视投影', value: 'perspective' },
+  { label: '正交投影', value: 'orthographic' },
 ]
 
-const transformType = ref('translate')
+const transformType = ref('perspective')
 const orthographicInterval = ref(1)
 
 const vertexCode = `
@@ -110,23 +97,14 @@ const initGl = () => {
     -.2, 0.8, -2, 0.45, 0.82, 0.24, 1,
     -0.7, -0.2, -2, 0.45, 0.82, 0.24, 1,
     0.3, -0.2, -2, 0.45, 0.82, 0.24, 1,
-    // -.2, 0.8, -1, 0.45, 0.82, 0.24, 1,
-    // -0.7, -0.2, -1, 0.45, 0.82, 0.24, 1,
-    // 0.3, -0.2, -1, 0.45, 0.82, 0.24, 1,
     // 蓝
     -.1, 0.6, -1, 0.086, 0.53, 1, 1,
     -0.6, -0.4, -1, 0.086, 0.53, 1, 1,
     0.4, -0.4, -1, 0.086, 0.53, 1, 1,
-    // -.1, 0.6, -.8, 0.086, 0.53, 1, 1,
-    // -0.6, -0.4, -.8, 0.086, 0.53, 1, 1,
-    // 0.4, -0.4, -.8, 0.086, 0.53, 1, 1,
     // 橙
     0, 0.4, 0, 0.98, 0.68, 0.078, 1,
     -0.5, -0.6, 0, 0.98, 0.68, 0.078, 1,
     0.5, -0.6, 0, 0.98, 0.68, 0.078, 1,
-    // 0, 0.4, -0.6, 0.98, 0.68, 0.078, 1,
-    // -0.5, -0.6, -0.6, 0.98, 0.68, 0.078, 1,
-    // 0.5, -0.6, -0.6, 0.98, 0.68, 0.078, 1,
   ])
   const byte = vertices.BYTES_PER_ELEMENT
 
@@ -139,67 +117,20 @@ const initGl = () => {
   gl.drawArrays(gl.TRIANGLES, 0, 9)
 }
 
-const reDrawCamera = () => {
-  const matrix = new ViewMatrix()
-  matrix.lookAt.apply(matrix, [...camera, ...target, ...up])
-  gl.uniformMatrix4fv(u_ViewMatrix, false, matrix.elements)
-
-  gl.clear(gl.COLOR_BUFFER_BIT)
-  gl.drawArrays(gl.TRIANGLES, 0, 9)
-}
-
-const handleUp = () => {
-  if (transformType.value === 'translate') {
-    target[1] += MOVE
-    camera[1] += MOVE
-  } else {
-    camera[1] += MOVE
-  }
-
-  reDrawCamera()
-}
-
-const handleDown = () => {
-  if (transformType.value === 'translate') {
-    target[1] -= MOVE
-    camera[1] -= MOVE
-  } else {
-    camera[1] -= MOVE
-  }
-  reDrawCamera()
-}
-
-const handleLeft = () => {
-  if (transformType.value === 'translate') {
-    target[0] -= MOVE
-    camera[0] -= MOVE
-  } else {
-    camera[0] -= MOVE
-  }
-  reDrawCamera()
-}
-
-const handleRight = () => {
-  if (transformType.value === 'translate') {
-    target[0] += MOVE
-    camera[0] += MOVE
-  } else {
-    camera[0] += MOVE
-  }
-  reDrawCamera()
-}
-
-const resetOrthographic = (value) => {
-  console.log('??111?', gl.canvas);
+watch(transformType, type => {
   u_PerspectiveMatrix = gl.getUniformLocation(program, 'u_PerspectiveMatrix')
-  // const perspectiveMatrix = new Mat4()
-  const perspectiveMatrix = new PerspectiveMatrix()
-  // perspectiveMatrix.setPerspective(30, gl.canvas.width/gl.canvas.height, 1, 100)
-  gl.uniformMatrix4fv(u_PerspectiveMatrix, false, perspectiveMatrix.elements)
-
+  if (type === 'perspective') {
+    const perspectiveMatrix = new PerspectiveMatrix()
+    perspectiveMatrix.setPerspective(30, gl.canvas.clientWidth / gl.canvas.clientHeight, 1, 100)
+    gl.uniformMatrix4fv(u_PerspectiveMatrix, false, perspectiveMatrix.elements)
+  } else {
+    const orthographicMatrix = new OrthographicMatrix()
+    orthographicMatrix.setOrthographicPosition(-1, 1, 1, -1, -5, 5)
+    gl.uniformMatrix4fv(u_PerspectiveMatrix, false, orthographicMatrix.elements)
+  }
   gl.clear(gl.COLOR_BUFFER_BIT)
   gl.drawArrays(gl.TRIANGLES, 0, 9)
-}
+})
 
 onMounted(() => {
   initGl()
