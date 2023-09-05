@@ -32,7 +32,7 @@ import OrthographicMatrix from '../matrix/OrthographicMatrix'
 
 const interval = ['[-1, 1]', '[-2, 2]', '[-3, 3]'] as const
 
-const fov = 90
+const fov = 60
 const near = 1
 const far = 5
 
@@ -68,7 +68,7 @@ const fragmentCode = `
 
 let gl, a_Position, canvas, a_Color, program, u_ViewMatrix, u_PerspectiveMatrix
 
-const camera = [0, 0, 1]
+const camera = [0, 0, 2]
 const target = [0, 0, -1]
 const up = [0, 1, 0]
 
@@ -89,7 +89,8 @@ const initGl = () => {
   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMatrix.elements)
 
   u_PerspectiveMatrix = gl.getUniformLocation(program, 'u_PerspectiveMatrix')
-  const perspectiveMatrix = new PerspectiveMatrix()
+  // const perspectiveMatrix = new PerspectiveMatrix()
+  const perspectiveMatrix = new Mat4()
   perspectiveMatrix.setPerspective(fov, gl.canvas.clientWidth / gl.canvas.clientHeight, near, far)
   gl.uniformMatrix4fv(u_PerspectiveMatrix, false, perspectiveMatrix.elements)
 
@@ -126,7 +127,7 @@ watch(transformType, type => {
     gl.uniformMatrix4fv(u_PerspectiveMatrix, false, perspectiveMatrix.elements)
   } else {
     const orthographicMatrix = new OrthographicMatrix()
-    orthographicMatrix.setOrthographicPosition(-2, 2, 1, -1, -3, 3)
+    orthographicMatrix.setOrthographicPosition(-2, 2, 1, -1, -4, 4)
     gl.uniformMatrix4fv(u_PerspectiveMatrix, false, orthographicMatrix.elements)
   }
   gl.clear(gl.COLOR_BUFFER_BIT)
