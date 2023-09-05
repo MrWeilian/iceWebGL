@@ -32,9 +32,9 @@ import OrthographicMatrix from '../matrix/OrthographicMatrix'
 
 const interval = ['[-1, 1]', '[-2, 2]', '[-3, 3]'] as const
 
-const fov = 30
+const fov = 90
 const near = 1
-const far = 10
+const far = 5
 
 const transformation = [
   { label: '透视投影', value: 'perspective' },
@@ -69,7 +69,7 @@ const fragmentCode = `
 let gl, a_Position, canvas, a_Color, program, u_ViewMatrix, u_PerspectiveMatrix
 
 const camera = [0, 0, 1]
-const target = [0, 0, -100]
+const target = [0, 0, -1]
 const up = [0, 1, 0]
 
 const initGl = () => {
@@ -95,17 +95,17 @@ const initGl = () => {
 
   const vertices = new Float32Array([
     // 绿
-    -.2, 0.8, -2, 0.45, 0.82, 0.24, 1,
-    -0.7, -0.2, -2, 0.45, 0.82, 0.24, 1,
-    0.3, -0.2, -2, 0.45, 0.82, 0.24, 1,
+    -.7, 0.8, -2, 0.45, 0.82, 0.24, 1,
+    -1.2, -0.2, -2, 0.45, 0.82, 0.24, 1,
+    -0.2, -0.2, -2, 0.45, 0.82, 0.24, 1,
     // 蓝
     -.1, 0.6, -1, 0.086, 0.53, 1, 1,
-    -0.6, -0.4, -1, 0.086, 0.53, 1, 1,
-    0.4, -0.4, -1, 0.086, 0.53, 1, 1,
+    -.6, -0.4, -1, 0.086, 0.53, 1, 1,
+    .4, -0.4, -1, 0.086, 0.53, 1, 1,
     // 橙
-    0, 0.4, 0, 0.98, 0.68, 0.078, 1,
-    -0.5, -0.6, 0, 0.98, 0.68, 0.078, 1,
-    0.5, -0.6, 0, 0.98, 0.68, 0.078, 1,
+    0.5, 0.4, 0, 0.98, 0.68, 0.078, 1,
+    0, -0.6, 0, 0.98, 0.68, 0.078, 1,
+    1, -0.6, 0, 0.98, 0.68, 0.078, 1,
   ])
   const byte = vertices.BYTES_PER_ELEMENT
 
@@ -126,7 +126,7 @@ watch(transformType, type => {
     gl.uniformMatrix4fv(u_PerspectiveMatrix, false, perspectiveMatrix.elements)
   } else {
     const orthographicMatrix = new OrthographicMatrix()
-    orthographicMatrix.setOrthographicPosition(-2, 2, 1, -1, -5, 5)
+    orthographicMatrix.setOrthographicPosition(-2, 2, 1, -1, -3, 3)
     gl.uniformMatrix4fv(u_PerspectiveMatrix, false, orthographicMatrix.elements)
   }
   gl.clear(gl.COLOR_BUFFER_BIT)
