@@ -27,10 +27,7 @@ import {
 } from '@element-plus/icons-vue'
 import ViewMatrix from '../matrix/ViewMatrix'
 import PerspectiveMatrix from '../matrix/PerspectiveMatrix';
-import { Mat4 } from '../cuon-matrix/mat4';
 import OrthographicMatrix from '../matrix/OrthographicMatrix'
-
-const interval = ['[-1, 1]', '[-2, 2]', '[-3, 3]'] as const
 
 const fov = 60
 const near = 1
@@ -42,7 +39,6 @@ const transformation = [
 ]
 
 const transformType = ref('perspective')
-const orthographicInterval = ref(1)
 
 const vertexCode = `
   attribute vec4 a_Position;
@@ -89,8 +85,7 @@ const initGl = () => {
   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMatrix.elements)
 
   u_PerspectiveMatrix = gl.getUniformLocation(program, 'u_PerspectiveMatrix')
-  // const perspectiveMatrix = new PerspectiveMatrix()
-  const perspectiveMatrix = new Mat4()
+  const perspectiveMatrix = new PerspectiveMatrix()
   perspectiveMatrix.setPerspective(fov, gl.canvas.clientWidth / gl.canvas.clientHeight, near, far)
   gl.uniformMatrix4fv(u_PerspectiveMatrix, false, perspectiveMatrix.elements)
 
