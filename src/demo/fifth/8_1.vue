@@ -1,8 +1,8 @@
 <template>
   <canvas
-      id="ice-8_1"
-      width="600"
-      height="400"
+    id="ice-8_1"
+    width="600"
+    height="400"
   />
 </template>
 
@@ -81,28 +81,34 @@ const initGl = () => {
   gl.uniformMatrix4fv(u_PerspectiveMatrix, false, perspectiveMatrix.elements)
 
   const vertices = new Float32Array([
-    // 绿
-    -.7, 0.8, -2, 0.45, 0.82, 0.24, 1,
-    -1.2, -0.2, -2, 0.45, 0.82, 0.24, 1,
-    -0.2, -0.2, -2, 0.45, 0.82, 0.24, 1,
     // 蓝
-    -.1, 0.6, -1, 0.086, 0.53, 1, 1,
-    -.6, -0.4, -1, 0.086, 0.53, 1, 1,
-    .4, -0.4, -1, 0.086, 0.53, 1, 1,
-    // 橙
-    0.5, 0.4, 0, 0.98, 0.68, 0.078, 1,
-    0, -0.6, 0, 0.98, 0.68, 0.078, 1,
-    1, -0.6, 0, 0.98, 0.68, 0.078, 1,
+    -1, 0, 0, 0.086, 0.53, 1, 1,
+    1, 0, 0, 0.086, 0.53, 1, 1,
+    0, 0, -1, 0.086, 0.53, 1, 1,
+    0, 1, -.5, 0.086, 0.53, 1, 1,
   ])
   const byte = vertices.BYTES_PER_ELEMENT
+  const indices = new Float32Array([
+    3, 0, 1,
+    1, 2, 3,
+    3, 2, 0,
+    0, 2, 1
+  ])
+
+  const indicesBuffer = gl.createBuffer()
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indicesBuffer)
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW)
+  gl.enable(gl.DEPTH_TEST)
 
   // 顶点坐标
   createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Position, 3, byte * 7, 0)
   // 颜色值
   createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Color, 4, byte * 7, byte * 3)
+
   gl.clearColor(0., 0., 0., .9)
   gl.clear(gl.COLOR_BUFFER_BIT)
-  gl.drawArrays(gl.TRIANGLES, 0, 9)
+  gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_BYTE, 0)
+  // gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
 }
 
 watch(transformType, type => {
