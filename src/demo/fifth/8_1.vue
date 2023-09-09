@@ -88,7 +88,7 @@ const initGl = () => {
     0, 1, -.5, 0.086, 0.53, 1, 1,
   ])
   const byte = vertices.BYTES_PER_ELEMENT
-  const indices = new Float32Array([
+  const indices = new Uint8Array([
     3, 0, 1,
     1, 2, 3,
     3, 2, 0,
@@ -97,6 +97,11 @@ const initGl = () => {
 
   const indicesBuffer = gl.createBuffer()
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indicesBuffer)
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW)
+  gl.enable(gl.DEPTH_TEST)
+
+  const indexBuffer = gl.createBuffer()
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer)
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW)
   gl.enable(gl.DEPTH_TEST)
 
