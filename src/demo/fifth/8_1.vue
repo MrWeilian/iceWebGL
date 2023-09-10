@@ -21,6 +21,7 @@ import {
   ArrowLeft,
   ArrowRight
 } from '@element-plus/icons-vue'
+import { Mat4 } from '../cuon-matrix/mat4';
 import ViewMatrix from '../matrix/ViewMatrix'
 import PerspectiveMatrix from '../matrix/PerspectiveMatrix';
 import OrthographicMatrix from '../matrix/OrthographicMatrix'
@@ -56,7 +57,7 @@ const fragmentCode = `
   }
 `
 
-let gl, a_Position, canvas, a_Color, program, u_ViewMatrix, u_ProjectionMatrix
+let gl, a_Position, canvas, a_Color, program, u_ModelMatrix, u_ViewMatrix, u_ProjectionMatrix
 
 const camera = [0, 0, 2]
 const target = [0, 0, -1]
@@ -72,6 +73,10 @@ const initGl = () => {
 
   a_Position = gl.getAttribLocation(program, 'a_Position')
   a_Color = gl.getAttribLocation(program, 'a_Color')
+
+  u_ModelMatrix = gl.getUniformLocation(program, 'u_ModelMatrix')
+  const modelMatrix = new Mat4()
+  gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements)
 
   u_ViewMatrix = gl.getUniformLocation(program, 'u_ViewMatrix')
   const viewMatrix = new ViewMatrix()
@@ -132,8 +137,6 @@ watch(transformType, type => {
   gl.clear(gl.COLOR_BUFFER_BIT)
   gl.drawArrays(gl.TRIANGLES, 0, 9)
 })
-
-
 
 onMounted(() => {
   initGl()
