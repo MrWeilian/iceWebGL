@@ -1,5 +1,5 @@
-export const createGl = (id: string) => {
-  const canvas = document.querySelector(id)
+export const createGl = (id: string): WebGLRenderingContext => {
+  const canvas = document.querySelector(id) as HTMLCanvasElement
   const gl = canvas.getContext('webgl')
   return gl
 }
