@@ -40,3 +40,6 @@
 3. [奇妙的相机](https://ice-webgl.netlify.app/content/%E4%BA%94%E3%80%81WebGL%E4%B8%89%E7%BB%B4%E4%B8%96%E7%95%8C/3.%20%E5%A5%87%E5%A6%99%E7%9A%84%E7%9B%B8%E6%9C%BA.html)
 4. [进阶——推导视图矩阵](https://ice-webgl.netlify.app/content/%E4%BA%94%E3%80%81WebGL%E4%B8%89%E7%BB%B4%E4%B8%96%E7%95%8C/4.%20%E8%BF%9B%E9%98%B6%E2%80%94%E2%80%94%E6%8E%A8%E5%AF%BC%E8%A7%86%E5%9B%BE%E7%9F%A9%E9%98%B5.html)
 5. [实战相机渲染引擎](https://ice-webgl.netlify.app/content/%E4%BA%94%E3%80%81WebGL%E4%B8%89%E7%BB%B4%E4%B8%96%E7%95%8C/5.%20%E5%AE%9E%E6%88%98%E7%9B%B8%E6%9C%BA%E6%B8%B2%E6%9F%93%E5%BC%95%E6%93%8E.html)
+6. [正交投影](https://ice-webgl.netlify.app/content/%E4%BA%94%E3%80%81WebGL%E4%B8%89%E7%BB%B4%E4%B8%96%E7%95%8C/6.%20%E6%AD%A3%E4%BA%A4%E6%8A%95%E5%BD%B1.html)
+7. [透视投影](https://ice-webgl.netlify.app/content/%E4%BA%94%E3%80%81WebGL%E4%B8%89%E7%BB%B4%E4%B8%96%E7%95%8C/7.%20%E9%80%8F%E8%A7%86%E6%8A%95%E5%BD%B1.html)
+8. [粒子动画——实战MVP变换](https://ice-webgl.netlify.app/content/%E4%BA%94%E3%80%81WebGL%E4%B8%89%E7%BB%B4%E4%B8%96%E7%95%8C/8.%20%E7%B2%92%E5%AD%90%E5%8A%A8%E7%94%BB%E2%80%94%E2%80%94%E5%AE%9E%E6%88%98MVP%E5%8F%98%E6%8D%A2.html)
