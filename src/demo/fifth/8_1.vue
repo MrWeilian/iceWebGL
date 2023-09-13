@@ -1,4 +1,11 @@
 <template>
+  <div class="box">
+    <el-radio-group v-model="transformType">
+      <el-radio v-for="item in transformation" :label="item.value">{{ item.label }}</el-radio>
+    </el-radio-group>
+    <el-button class="btn" type="primary" @click="toggleAnimation">{{ running ? '停止' : '开始' }}</el-button>
+  </div>
+
   <canvas
     id="ice-8_1"
     width="600"
@@ -31,7 +38,14 @@ import PerspectiveMatrix from '../matrix/PerspectiveMatrix';
 import OrthographicMatrix from '../matrix/OrthographicMatrix';
 import { useMouseCamera } from '@ice-webgl/utils/useMouseCamera';
 
-const fov = 60
+const transformation = [
+  { label: '透视投影', value: 'perspective' },
+  { label: '正交投影', value: 'orthographic' },
+]
+
+const running = ref(false)
+
+const fov = 80
 const near = 1
 const far = 100
 
@@ -62,10 +76,11 @@ const fragmentCode = `
 
 let gl: WebGLRenderingContext, a_Position, canvas, program, indices, u_Color, u_ModelMatrix, u_ViewMatrix, u_ProjectionMatrix
 
-const camera = [0, 0, 8]
+const camera = [0, 0, 10]
 const target = [0, 0, -1]
 const up = [0, 1, 0]
 const maxCameraPosition = 6
+let animationNum = null
 
 const getCameraPosition = (origin: number) => {
   if (origin > maxCameraPosition) return maxCameraPosition
@@ -95,9 +110,10 @@ const createViewMatrix = (cameraArr: number[]) => {
 }
 
 const createProjectionMatrix = () => {
+  const canvasEl = gl.canvas as HTMLElement
   u_ProjectionMatrix = gl.getUniformLocation(program, 'u_ProjectionMatrix')
   const perspectiveMatrix = new PerspectiveMatrix()
-  perspectiveMatrix.setPerspective(fov, gl.canvas.clientWidth / gl.canvas.clientHeight, near, far)
+  perspectiveMatrix.setPerspective(fov, canvasEl.clientWidth / canvasEl.clientHeight, near, far)
   gl.uniformMatrix4fv(u_ProjectionMatrix, false, perspectiveMatrix.elements)
 }
 
@@ -117,16 +133,22 @@ const initGl = () => {
   createProjectionMatrix()
 
   const vertices = new Float32Array([
-    -.25, 0, 0,
-    .25, 0, 0,
-    0, 0, -.25,
-    0, .5, -.25,
+    -.25, .25, .25,
+    -.25, -.25, .25,
+    .25, -.25, .25,
+    .25, .25, .25,
+    .25, .25, -.25,
+    .25, -.25, -.25,
+    -.25, -.25, -.25,
+    -.25, .25, -.25,
   ])
   indices = new Uint8Array([
-    3, 0, 1,
-    1, 2, 3,
-    3, 2, 0,
-    0, 2, 1
+    0, 1, 2, 0, 2, 3,
+    3, 2, 5, 3, 5, 4,
+    4, 5, 6, 4, 6, 7,
+    7, 0, 6, 0, 1, 6,
+    0, 3, 4, 0, 4, 7,
+    1, 2, 5, 1, 5, 6,
   ])
 
   const indicesBuffer = gl.createBuffer()
@@ -137,9 +159,8 @@ const initGl = () => {
   // 顶点坐标
   createBuffer(gl, gl.ARRAY_BUFFER, vertices, a_Position, 3, 0, 0)
 
-  gl.clearColor(0., 0., 0., .9)
-
-  animation()
+  // gl.clearColor(0., 0., 0., 1)
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 }
 
 const draw = () => {
@@ -150,10 +171,10 @@ const draw = () => {
     gl.uniform4fv(u_Color, item.u_Color)
     gl.uniformMatrix4fv(u_ModelMatrix, false, item.u_ModelMatrix.elements)
     
-    gl.drawElements(gl.LINE_LOOP, indices.length, gl.UNSIGNED_BYTE, 0)
+    gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_BYTE, 0)
   }
 
-  triangularPyramids = triangularPyramids.filter(_ => (Date.now() - _.startTime) < _.maxExistTime)
+  running.value && (triangularPyramids = triangularPyramids.filter(_ => (Date.now() - _.startTime) < _.animationTime))
 }
 
 const moveOption = (diffX: number, diffY: number) => {
@@ -176,18 +197,18 @@ const animation = () => {
   createTriangularPyramid()
   for (const triangularPyramid of triangularPyramids) {
     const translateMatrix = new Mat4()
-    const translate = triangularPyramid.translate
+    const translate = triangularPyramid.translate.map(_ => _ / 100 * 1.5)
     translateMatrix.setTranslate.apply(translateMatrix, translate)
 
     const rotateMatrix = new Mat4()
-    const rotate = triangularPyramid.rotate
+    const rotate = triangularPyramid.rotate.map(_ => _/10)
     rotateMatrix.setRotate.apply(rotateMatrix, rotate)
 
     triangularPyramid.u_ModelMatrix.multiply(translateMatrix).multiply(rotateMatrix)
   }
   draw()
 
-  requestAnimationFrame(animation)
+  animationNum = requestAnimationFrame(animation)
 }
 
 const {
@@ -198,54 +219,58 @@ const {
 } = useMouseCamera({ moveOption, upOption })
 
 const createRandom = (area: number = 1) => {
-  const target = Math.floor((Math.random() - area / 10) * 3)
+  const target = Math.floor((Math.random() * (area * 2)) - area)
   return target
 }
 
-const randomTriangularPyramid = () => {
+const randomCubeParams = () => {
   const u_Color = new Float32Array([Math.random(), Math.random(), Math.random(), .9])
   const u_ModelMatrix = new Mat4()
-  const translateMatrix = new Mat4()
-  const rotateMatrix = new Mat4()
-  const translate = [createRandom(.005), createRandom(.005), createRandom(.005)]
-  const rotate = [Math.random() * 10, createRandom(), createRandom(), 1]
-  // 平移
-  translateMatrix.setTranslate.apply(translateMatrix, translate)
-  // 旋转
-  rotateMatrix.setRotate.apply(rotateMatrix, rotate)
-  
-  u_ModelMatrix.multiply(translateMatrix).multiply(rotateMatrix)
+  const translate = [createRandom(10), createRandom(10), createRandom(1)]
 
+  const rotate = [createRandom(30), createRandom(10), createRandom(10), createRandom(10)]
+  const startTime = Date.now()
+  const animationTime = Math.floor(Math.random() * 3000 + 4000) // 2-5s 动画时间
+  
   return {
     translate,
     rotate,
     u_Color,
     u_ModelMatrix,
-    startTime: Date.now(),
-    // 2-5s存活时间
-    maxExistTime: Math.floor(Math.random() * 3000 + 2000)
+    startTime,
+    animationTime
   }
 }
 
 const createTriangularPyramid = () => {
-  for (let i = 0; i < 6; i++) {
-    triangularPyramids.push(randomTriangularPyramid())
+  for (let i = 0; i < 8; i++) {
+    triangularPyramids.push(randomCubeParams())
+  }
+}
+
+const toggleAnimation = () => {
+  running.value = !running.value
+  if (!running.value) {
+    cancelAnimationFrame(animationNum)
+  } else {
+    triangularPyramids = []
+    animation()
   }
 }
 
 watch(transformType, type => {
+  const canvasEl = gl.canvas as HTMLElement
   u_ProjectionMatrix = gl.getUniformLocation(program, 'u_ProjectionMatrix')
   if (type === 'perspective') {
     const perspectiveMatrix = new PerspectiveMatrix()
-    perspectiveMatrix.setPerspective(fov, gl.canvas.clientWidth / gl.canvas.clientHeight, near, far)
+    perspectiveMatrix.setPerspective(fov, canvasEl.clientWidth / canvasEl.clientHeight, near, far)
     gl.uniformMatrix4fv(u_ProjectionMatrix, false, perspectiveMatrix.elements)
   } else {
     const orthographicMatrix = new OrthographicMatrix()
-    orthographicMatrix.setOrthographicPosition(-2, 2, 1, -1, -4, 4)
+    orthographicMatrix.setOrthographicPosition(-10, 10, 8, -8, -100, 100)
     gl.uniformMatrix4fv(u_ProjectionMatrix, false, orthographicMatrix.elements)
   }
-  gl.clear(gl.COLOR_BUFFER_BIT)
-  gl.drawArrays(gl.TRIANGLES, 0, 9)
+  draw()
 })
 
 onMounted(() => {
@@ -402,5 +427,12 @@ export default defineComponent({
 <style scoped lang="scss">
 #ice-8_1 {
   margin: 16px auto 0;
+}
+.box {
+  display: flex;
+  align-items: center;
+}
+.btn {
+  margin-left: 16px;
 }
 </style>
