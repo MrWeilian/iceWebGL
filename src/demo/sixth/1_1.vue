@@ -37,7 +37,7 @@ const vertexCode = `
     vec3 normal = normalize(a_Normal);
     vec3 normalizeLightDirection = normalize(u_LightDirection);
     // 求光线、法向量点积
-    float dotProduct = dot(normal, normalizeLightDirection);
+    float dotProduct = max(dot(normal, normalizeLightDirection), 0.0);
     vec3 colorRes = vec3(u_LightColor) * vec3(a_Color) * dotProduct;
     v_Color= vec4(colorRes, a_Color.a);
   }
@@ -70,7 +70,8 @@ const initGl = () => {
   u_LightDirection = gl.getUniformLocation(program, 'u_LightDirection')
 
   const matrix = new Matrix4()
-  matrix.setRotate(30, .3, -.3, 0)
+  matrix.setRotate(20, 0, 1, 0).rotate(30, 1, 0, 0)
+  // matrix.setRotate(0, 0, 1, 0)
   gl.uniformMatrix4fv(u_ModelMatrix, false, matrix.elements)
 
   const vertices = new Float32Array([
@@ -105,6 +106,7 @@ const initGl = () => {
     0.5, -0.5, -0.5, 0.08, 0.5, 1, 1, 0., -1., 0.,
     0.5, -0.5, 0.5, 0.08, 0.5, 1, 1, 0., -1., 0.,
   ])
+
   const byte = vertices.BYTES_PER_ELEMENT
 
   indices = new Uint8Array([
@@ -120,10 +122,10 @@ const initGl = () => {
 
   ])
 
-  const lightColor = new Vector4(1, 1, 1, 1)
+  const lightColor = new Vector4(1.0, 1.0, 1.0, 1.0)
   gl.uniform4fv(u_LightColor, lightColor.elements)
 
-  const lightDirection = new Vector3(-1, -1, 0)
+  const lightDirection = new Vector3(.6, -.6, -.8)
   gl.uniform3fv(u_LightDirection, lightDirection.elements)
 
   const indexBuffer = gl.createBuffer()
