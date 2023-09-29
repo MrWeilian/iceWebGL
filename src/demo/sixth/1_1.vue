@@ -5,8 +5,19 @@
       width="300"
       height="300"
     />
-    <div>
-      <el-switch v-model="light" active-text="开灯！" />
+    <div class="form">
+      <p>调整平行光照射角度：</p>
+      <el-form>
+        <el-form-item label="光源x位置">
+          <el-slider v-model="xLight" :max="3" :step="0.01"  />
+        </el-form-item>
+        <el-form-item label="光源y位置">
+          <el-slider v-model="yLight" :max="3" :step="0.01"  />
+        </el-form-item>
+        <el-form-item label="光源z位置">
+          <el-slider v-model="zLight" :max="3" :step="0.01"  />
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
@@ -21,23 +32,25 @@ import {
 } from '@ice-webgl/utils'
 import { Matrix4, Vector3, Vector4 } from '../cuon-matrix'
 
-const light = ref(false)
+const xLight = ref(3)
+const yLight = ref(2)
+const zLight = ref(1)
 
 const vertexCode = `
   attribute vec4 a_Position;
   attribute vec4 a_Color;
   attribute vec3 a_Normal;
   varying vec4 v_Color;
-  uniform mat4 u_ModelMatrix;
+  uniform mat4 u_MvpMatrix;
   uniform vec4 u_LightColor;
   uniform vec3 u_LightDirection;
 
   void main () {
-    gl_Position = u_ModelMatrix * a_Position;
+    gl_Position = u_MvpMatrix * a_Position;
     vec3 normal = normalize(a_Normal);
     vec3 normalizeLightDirection = normalize(u_LightDirection);
     // 求光线、法向量点积
-    float dotProduct = max(dot(normal, normalizeLightDirection), 0.0);
+    float dotProduct = dot(normal, normalizeLightDirection);
     vec3 colorRes = vec3(u_LightColor) * vec3(a_Color) * dotProduct;
     v_Color= vec4(colorRes, a_Color.a);
   }
@@ -52,7 +65,7 @@ const fragmentCode = `
   }
 `
 
-let gl, a_Position, canvas, a_Color, a_Normal, program, u_ModelMatrix, u_LightColor, u_LightDirection, indices
+let gl, a_Position, canvas, a_Color, a_Normal, program, u_MvpMatrix, u_LightColor, u_LightDirection, indices
 
 const initGl = () => {
   gl = createGl('#ice-1_1')
@@ -65,13 +78,15 @@ const initGl = () => {
   a_Position = gl.getAttribLocation(program, 'a_Position')
   a_Color = gl.getAttribLocation(program, 'a_Color')
   a_Normal = gl.getAttribLocation(program, 'a_Normal')
-  u_ModelMatrix = gl.getUniformLocation(program, 'u_ModelMatrix')
+  u_MvpMatrix = gl.getUniformLocation(program, 'u_MvpMatrix')
   u_LightColor = gl.getUniformLocation(program, 'u_LightColor')
   u_LightDirection = gl.getUniformLocation(program, 'u_LightDirection')
 
   const matrix = new Matrix4()
-  matrix.setRotate(30, 0, 1, 0).rotate(-30, 1, 0, 0)
-  gl.uniformMatrix4fv(u_ModelMatrix, false, matrix.elements)
+  matrix
+    .perspective(60, 1, 1, 100)
+    .lookAt(1.3, 1.3, 1.3, 0, 0, 0, 0, 1, 0)
+  gl.uniformMatrix4fv(u_MvpMatrix, false, matrix.elements)
 
   const vertices = new Float32Array([
     // 蓝 1（前）
@@ -120,7 +135,7 @@ const initGl = () => {
   const lightColor = new Vector4(1.0, 1.0, 1.0, 1.0)
   gl.uniform4fv(u_LightColor, lightColor.elements)
 
-  const lightDirection = new Vector3(1, 2, 1)
+  const lightDirection = new Vector3(xLight.value, yLight.value, zLight.value)
   gl.uniform3fv(u_LightDirection, lightDirection.elements)
 
   const indexBuffer = gl.createBuffer()
@@ -139,8 +154,12 @@ const initGl = () => {
   gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_BYTE, 0)
 }
 
-watch(light, () => {
+watch([xLight, yLight, zLight], () => {
+  const lightDirection = new Vector3(xLight.value, yLight.value, zLight.value)
+  gl.uniform3fv(u_LightDirection, lightDirection.elements)
 
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+  gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_BYTE, 0)
 })
 
 onMounted(() => {
@@ -159,6 +178,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 .box {
   display: flex;
-
+  .form {
+    flex: 1;
+  }
 }
 </style>
