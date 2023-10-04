@@ -43,3 +43,7 @@
 6. [正交投影](https://ice-webgl.netlify.app/content/%E4%BA%94%E3%80%81WebGL%E4%B8%89%E7%BB%B4%E4%B8%96%E7%95%8C/6.%20%E6%AD%A3%E4%BA%A4%E6%8A%95%E5%BD%B1.html)
 7. [透视投影](https://ice-webgl.netlify.app/content/%E4%BA%94%E3%80%81WebGL%E4%B8%89%E7%BB%B4%E4%B8%96%E7%95%8C/7.%20%E9%80%8F%E8%A7%86%E6%8A%95%E5%BD%B1.html)
 8. [粒子动画——实战MVP变换](https://ice-webgl.netlify.app/content/%E4%BA%94%E3%80%81WebGL%E4%B8%89%E7%BB%B4%E4%B8%96%E7%95%8C/8.%20%E7%B2%92%E5%AD%90%E5%8A%A8%E7%94%BB%E2%80%94%E2%80%94%E5%AE%9E%E6%88%98MVP%E5%8F%98%E6%8D%A2.html)
+
+## 六、WebGL光照
+1. [初识光照](https://ice-webgl.netlify.app/content/%E5%85%AD%E3%80%81WebGL%E5%85%89%E7%85%A7/1.%20%E5%88%9D%E8%AF%86%E5%85%89%E7%85%A7.html)
+2. [环境光的漫反射](https://ice-webgl.netlify.app/content/%E5%85%AD%E3%80%81WebGL%E5%85%89%E7%85%A7/2.%20%E7%8E%AF%E5%A2%83%E5%85%89%E7%9A%84%E6%BC%AB%E5%8F%8D%E5%B0%84.html)
