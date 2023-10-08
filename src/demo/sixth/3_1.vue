@@ -1,25 +1,10 @@
 <template>
   <div class="box">
     <canvas
-      id="ice-2_2"
+      id="ice-3_1"
       width="300"
       height="300"
     />
-    <div class="form">
-      <el-switch v-model="envLight" active-text="开启环境光" />
-      <p>调整平行光照射角度：</p>
-      <el-form>
-        <el-form-item label="光源x位置">
-          <el-slider v-model="xLight" :max="3" :step="0.01"  />
-        </el-form-item>
-        <el-form-item label="光源y位置">
-          <el-slider v-model="yLight" :max="3" :step="0.01"  />
-        </el-form-item>
-        <el-form-item label="光源z位置">
-          <el-slider v-model="zLight" :max="3" :step="0.01"  />
-        </el-form-item>
-      </el-form>
-    </div>
   </div>
 </template>
 
@@ -36,10 +21,6 @@ import { Matrix4, Vector3, Vector4 } from '../cuon-matrix'
 const envLight = ref(true)
 const ENV_LIGHT_RGB = 0.36
 
-const xLight = ref(3)
-const yLight = ref(2)
-const zLight = ref(1)
-
 const vertexCode = `
   attribute vec4 a_Position;
   attribute vec4 a_Color;
@@ -47,15 +28,16 @@ const vertexCode = `
   varying vec4 v_Color;
   uniform mat4 u_MvpMatrix;
   uniform vec4 u_LightColor;
-  uniform vec3 u_LightDirection;
+  uniform vec3 u_LightPosition;
   uniform vec4 u_AmbientColor;
 
   void main () {
     gl_Position = u_MvpMatrix * a_Position;
     vec3 normal = normalize(a_Normal);
-    vec3 normalizeLightDirection = normalize(u_LightDirection);
+
+    vec3 lightDirection = normalize(u_LightPosition - vec3(a_Position));
     // 求光线、法向量点积
-    float dotProduct = dot(normal, normalizeLightDirection);
+    float dotProduct = dot(normal, lightDirection);
     vec4 ambient = a_Color * u_AmbientColor;
     vec3 colorRes = vec3(u_LightColor) * vec3(a_Color) * dotProduct;
     v_Color= vec4(colorRes, a_Color.a) + ambient;
@@ -71,10 +53,10 @@ const fragmentCode = `
   }
 `
 
-let gl, a_Position, canvas, a_Color, a_Normal, program, u_MvpMatrix, u_LightColor, u_LightDirection, u_AmbientColor, indices
+let gl, a_Position, canvas, a_Color, a_Normal, program, u_MvpMatrix, u_LightColor, u_LightPosition, u_AmbientColor, indices
 
 const initGl = () => {
-  gl = createGl('#ice-2_2')
+  gl = createGl('#ice-3_1')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -86,7 +68,7 @@ const initGl = () => {
   a_Normal = gl.getAttribLocation(program, 'a_Normal')
   u_MvpMatrix = gl.getUniformLocation(program, 'u_MvpMatrix')
   u_LightColor = gl.getUniformLocation(program, 'u_LightColor')
-  u_LightDirection = gl.getUniformLocation(program, 'u_LightDirection')
+  u_LightPosition = gl.getUniformLocation(program, 'u_LightPosition')
   u_AmbientColor = gl.getUniformLocation(program, 'u_AmbientColor')
 
   const matrix = new Matrix4()
@@ -142,8 +124,8 @@ const initGl = () => {
   const lightColor = new Vector4(1.0, 1.0, 1.0, 1.0)
   gl.uniform4fv(u_LightColor, lightColor.elements)
 
-  const lightDirection = new Vector3(xLight.value, yLight.value, zLight.value)
-  gl.uniform3fv(u_LightDirection, lightDirection.elements)
+  const lightPosition = new Vector3(0, 3, 4)
+  gl.uniform3fv(u_LightPosition, lightPosition.elements)
 
   const ambientColor = new Vector4(ENV_LIGHT_RGB, ENV_LIGHT_RGB, ENV_LIGHT_RGB, 1.)
   gl.uniform4fv(u_AmbientColor, ambientColor.elements)
@@ -163,14 +145,6 @@ const initGl = () => {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
   gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_BYTE, 0)
 }
-
-watch([xLight, yLight, zLight], () => {
-  const lightDirection = new Vector3(xLight.value, yLight.value, zLight.value)
-  gl.uniform3fv(u_LightDirection, lightDirection.elements)
-
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-  gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_BYTE, 0)
-})
 
 watch(envLight, light => {
 
@@ -192,7 +166,7 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Sixth2_2'
+  name: 'Sixth3_1'
 })
 </script>
 
