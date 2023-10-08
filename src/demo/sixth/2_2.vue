@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <canvas
-      id="ice-1_2"
+      id="ice-2_2"
       width="300"
       height="300"
     />
@@ -74,7 +74,7 @@ const fragmentCode = `
 let gl, a_Position, canvas, a_Color, a_Normal, program, u_MvpMatrix, u_LightColor, u_LightDirection, u_AmbientColor, indices
 
 const initGl = () => {
-  gl = createGl('#ice-1_2')
+  gl = createGl('#ice-2_2')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -192,7 +192,7 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Sixth1_2'
+  name: 'Sixth2_2'
 })
 </script>
 
