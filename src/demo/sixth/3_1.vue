@@ -44,6 +44,35 @@ const vertexCode = `
   }
 `
 
+var VSHADER_SOURCE =
+    'attribute vec4 a_Position;\n' +
+    'attribute vec4 a_Color;\n' +
+    'attribute vec4 a_Normal;\n' +
+    'uniform mat4 u_MvpMatrix;\n' +
+    'uniform mat4 u_ModelMatrix;\n' +   // Model matrix
+    'uniform mat4 u_NormalMatrix;\n' +  // Transformation matrix of the normal
+    'uniform vec3 u_LightColor;\n' +    // Light color
+    'uniform vec3 u_LightPosition;\n' + // Position of the light source (in the world coordinate system)
+    'uniform vec3 u_AmbientLight;\n' +  // Ambient light color
+    'varying vec4 v_Color;\n' +
+    'void main() {\n' +
+    '  gl_Position = u_MvpMatrix * a_Position;\n' +
+    // Recalculate the normal based on the model matrix and make its length 1.
+    '  vec3 normal = normalize(vec3(u_NormalMatrix * a_Normal));\n' +
+    // Calculate world coordinate of vertex
+    '  vec4 vertexPosition = u_ModelMatrix * a_Position;\n' +
+    // Calculate the light direction and make it 1.0 in length
+    '  vec3 lightDirection = normalize(u_LightPosition - vec3(vertexPosition));\n' +
+    // The dot product of the light direction and the normal
+    '  float nDotL = max(dot(lightDirection, normal), 0.0);\n' +
+    // Calculate the color due to diffuse reflection
+    '  vec3 diffuse = u_LightColor * a_Color.rgb * nDotL;\n' +
+    // Calculate the color due to ambient reflection
+    '  vec3 ambient = u_AmbientLight * a_Color.rgb;\n' +
+    //  Add the surface colors due to diffuse reflection and ambient reflection
+    '  v_Color = vec4(diffuse + ambient, a_Color.a);\n' +
+    '}\n';
+
 const fragmentCode = `
   precision mediump float;
   varying vec4 v_Color;
@@ -73,7 +102,7 @@ const initGl = () => {
 
   const matrix = new Matrix4()
   matrix
-    .perspective(60, 1, 1, 100)
+    .perspective(50, 1, 1, 100)
     .lookAt(1.3, 1.3, 1.3, 0, 0, 0, 0, 1, 0)
   gl.uniformMatrix4fv(u_MvpMatrix, false, matrix.elements)
 
@@ -124,7 +153,7 @@ const initGl = () => {
   const lightColor = new Vector4(1.0, 1.0, 1.0, 1.0)
   gl.uniform4fv(u_LightColor, lightColor.elements)
 
-  const lightPosition = new Vector3(0, 3, 4)
+  const lightPosition = new Vector3(1, 1, 1)
   gl.uniform3fv(u_LightPosition, lightPosition.elements)
 
   const ambientColor = new Vector4(ENV_LIGHT_RGB, ENV_LIGHT_RGB, ENV_LIGHT_RGB, 1.)
