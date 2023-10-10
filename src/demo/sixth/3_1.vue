@@ -153,7 +153,7 @@ const initGl = () => {
   const lightColor = new Vector4(1.0, 1.0, 1.0, 1.0)
   gl.uniform4fv(u_LightColor, lightColor.elements)
 
-  const lightPosition = new Vector3(1, 1, 1)
+  const lightPosition = new Vector3(1, 1.1, 1.2)
   gl.uniform3fv(u_LightPosition, lightPosition.elements)
 
   const ambientColor = new Vector4(ENV_LIGHT_RGB, ENV_LIGHT_RGB, ENV_LIGHT_RGB, 1.)
