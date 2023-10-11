@@ -5,6 +5,21 @@
       width="300"
       height="300"
     />
+    <div class="form">
+      <el-switch v-model="envLight" active-text="开启环境光" />
+      <p>调整灯泡位置：</p>
+      <el-form>
+        <el-form-item label="灯泡x坐标">
+          <el-slider v-model="xLight" :min="1" :max="2" :step="0.01"  />
+        </el-form-item>
+        <el-form-item label="灯泡y坐标">
+          <el-slider v-model="yLight" :min="1" :max="2" :step="0.01"  />
+        </el-form-item>
+        <el-form-item label="灯泡z坐标">
+          <el-slider v-model="zLight" :min="1" :max="2" :step="0.01"  />
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
@@ -20,6 +35,10 @@ import { Matrix4, Vector3, Vector4 } from '../cuon-matrix'
 
 const envLight = ref(true)
 const ENV_LIGHT_RGB = 0.36
+
+const xLight = ref(1)
+const yLight = ref(1.1)
+const zLight = ref(1.2)
 
 const vertexCode = `
   attribute vec4 a_Position;
@@ -43,35 +62,6 @@ const vertexCode = `
     v_Color= vec4(colorRes, a_Color.a) + ambient;
   }
 `
-
-var VSHADER_SOURCE =
-    'attribute vec4 a_Position;\n' +
-    'attribute vec4 a_Color;\n' +
-    'attribute vec4 a_Normal;\n' +
-    'uniform mat4 u_MvpMatrix;\n' +
-    'uniform mat4 u_ModelMatrix;\n' +   // Model matrix
-    'uniform mat4 u_NormalMatrix;\n' +  // Transformation matrix of the normal
-    'uniform vec3 u_LightColor;\n' +    // Light color
-    'uniform vec3 u_LightPosition;\n' + // Position of the light source (in the world coordinate system)
-    'uniform vec3 u_AmbientLight;\n' +  // Ambient light color
-    'varying vec4 v_Color;\n' +
-    'void main() {\n' +
-    '  gl_Position = u_MvpMatrix * a_Position;\n' +
-    // Recalculate the normal based on the model matrix and make its length 1.
-    '  vec3 normal = normalize(vec3(u_NormalMatrix * a_Normal));\n' +
-    // Calculate world coordinate of vertex
-    '  vec4 vertexPosition = u_ModelMatrix * a_Position;\n' +
-    // Calculate the light direction and make it 1.0 in length
-    '  vec3 lightDirection = normalize(u_LightPosition - vec3(vertexPosition));\n' +
-    // The dot product of the light direction and the normal
-    '  float nDotL = max(dot(lightDirection, normal), 0.0);\n' +
-    // Calculate the color due to diffuse reflection
-    '  vec3 diffuse = u_LightColor * a_Color.rgb * nDotL;\n' +
-    // Calculate the color due to ambient reflection
-    '  vec3 ambient = u_AmbientLight * a_Color.rgb;\n' +
-    //  Add the surface colors due to diffuse reflection and ambient reflection
-    '  v_Color = vec4(diffuse + ambient, a_Color.a);\n' +
-    '}\n';
 
 const fragmentCode = `
   precision mediump float;
@@ -102,7 +92,7 @@ const initGl = () => {
 
   const matrix = new Matrix4()
   matrix
-    .perspective(50, 1, 1, 100)
+    .perspective(60, 1, 1, 100)
     .lookAt(1.3, 1.3, 1.3, 0, 0, 0, 0, 1, 0)
   gl.uniformMatrix4fv(u_MvpMatrix, false, matrix.elements)
 
@@ -153,7 +143,7 @@ const initGl = () => {
   const lightColor = new Vector4(1.0, 1.0, 1.0, 1.0)
   gl.uniform4fv(u_LightColor, lightColor.elements)
 
-  const lightPosition = new Vector3(1, 1.1, 1.2)
+  const lightPosition = new Vector3(xLight.value, yLight.value, zLight.value)
   gl.uniform3fv(u_LightPosition, lightPosition.elements)
 
   const ambientColor = new Vector4(ENV_LIGHT_RGB, ENV_LIGHT_RGB, ENV_LIGHT_RGB, 1.)
@@ -174,6 +164,14 @@ const initGl = () => {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
   gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_BYTE, 0)
 }
+
+watch([xLight, yLight, zLight], () => {
+  const lightPosition = new Vector3(xLight.value, yLight.value, zLight.value)
+  gl.uniform3fv(u_LightPosition, lightPosition.elements)
+
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+  gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_BYTE, 0)
+})
 
 watch(envLight, light => {
 
