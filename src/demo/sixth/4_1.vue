@@ -1,10 +1,25 @@
 <template>
   <div class="box">
     <canvas
-      id="ice-3_2"
+      id="ice-4_1"
       width="300"
       height="300"
     />
+    <div class="form">
+      <el-switch v-model="envLight" active-text="开启环境光" />
+      <p>调整灯泡位置：</p>
+      <el-form>
+        <el-form-item label="灯泡x坐标">
+          <el-slider v-model="xLight" :min="1" :max="2" :step="0.01"  />
+        </el-form-item>
+        <el-form-item label="灯泡y坐标">
+          <el-slider v-model="yLight" :min="1" :max="2" :step="0.01"  />
+        </el-form-item>
+        <el-form-item label="灯泡z坐标">
+          <el-slider v-model="zLight" :min="1" :max="2" :step="0.01"  />
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
@@ -21,6 +36,10 @@ import { Matrix4, Vector3, Vector4 } from '../cuon-matrix'
 const envLight = ref(true)
 const ENV_LIGHT_RGB = 0.36
 
+const xLight = ref(1)
+const yLight = ref(1.1)
+const zLight = ref(1.2)
+
 const vertexCode = `
   attribute vec4 a_Position;
   attribute vec4 a_Color;
@@ -30,7 +49,6 @@ const vertexCode = `
   uniform vec4 u_LightColor;
   uniform vec3 u_LightPosition;
   uniform vec4 u_AmbientColor;
-  varying vec3 v_Position;
 
   void main () {
     gl_Position = u_MvpMatrix * a_Position;
@@ -57,7 +75,7 @@ const fragmentCode = `
 let gl, a_Position, canvas, a_Color, a_Normal, program, u_MvpMatrix, u_LightColor, u_LightPosition, u_AmbientColor, indices
 
 const initGl = () => {
-  gl = createGl('#ice-3_2')
+  gl = createGl('#ice-4_1')
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexCode)
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode)
@@ -125,7 +143,7 @@ const initGl = () => {
   const lightColor = new Vector4(1.0, 1.0, 1.0, 1.0)
   gl.uniform4fv(u_LightColor, lightColor.elements)
 
-  const lightPosition = new Vector3(0, 3, 4)
+  const lightPosition = new Vector3(xLight.value, yLight.value, zLight.value)
   gl.uniform3fv(u_LightPosition, lightPosition.elements)
 
   const ambientColor = new Vector4(ENV_LIGHT_RGB, ENV_LIGHT_RGB, ENV_LIGHT_RGB, 1.)
@@ -147,6 +165,14 @@ const initGl = () => {
   gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_BYTE, 0)
 }
 
+watch([xLight, yLight, zLight], () => {
+  const lightPosition = new Vector3(xLight.value, yLight.value, zLight.value)
+  gl.uniform3fv(u_LightPosition, lightPosition.elements)
+
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+  gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_BYTE, 0)
+})
+
 watch(envLight, light => {
 
   const ambientColor = light
@@ -167,7 +193,7 @@ onMounted(() => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Sixth3_2'
+  name: 'Sixth4_1'
 })
 </script>
 
