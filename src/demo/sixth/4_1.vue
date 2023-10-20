@@ -6,6 +6,7 @@
       height="300"
     />
     <div class="form">
+      <el-switch style="margin-right: 16px;" v-model="isRotated" active-text="开始旋转" />
       <el-switch v-model="envLight" active-text="开启环境光" />
       <p>调整灯泡位置：</p>
       <el-form>
@@ -34,6 +35,7 @@ import {
 import { Matrix4, Vector3, Vector4 } from '../cuon-matrix'
 
 const envLight = ref(true)
+const isRotated = ref(false)
 const ENV_LIGHT_RGB = 0.36
 
 const xLight = ref(1)
@@ -72,7 +74,7 @@ const fragmentCode = `
   }
 `
 
-let gl, a_Position, canvas, a_Color, a_Normal, program, u_MvpMatrix, u_LightColor, u_LightPosition, u_AmbientColor, indices
+let gl, a_Position, canvas, a_Color, a_Normal, program, u_MvpMatrix, u_LightColor, u_LightPosition, u_AmbientColor, indices, baseMvpMatrix, animationId
 
 const initGl = () => {
   gl = createGl('#ice-4_1')
@@ -90,11 +92,11 @@ const initGl = () => {
   u_LightPosition = gl.getUniformLocation(program, 'u_LightPosition')
   u_AmbientColor = gl.getUniformLocation(program, 'u_AmbientColor')
 
-  const matrix = new Matrix4()
-  matrix
+  baseMvpMatrix = new Matrix4()
+  baseMvpMatrix
     .perspective(60, 1, 1, 100)
     .lookAt(1.3, 1.3, 1.3, 0, 0, 0, 0, 1, 0)
-  gl.uniformMatrix4fv(u_MvpMatrix, false, matrix.elements)
+  gl.uniformMatrix4fv(u_MvpMatrix, false, baseMvpMatrix.elements)
 
   const vertices = new Float32Array([
     // 蓝 1（前）
@@ -165,12 +167,28 @@ const initGl = () => {
   gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_BYTE, 0)
 }
 
+const animation = () => {
+  baseMvpMatrix.rotate(1, 0, 1, 0)
+  gl.uniformMatrix4fv(u_MvpMatrix, false, baseMvpMatrix.elements)
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+  gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_BYTE, 0)
+  animationId = requestAnimationFrame(animation)
+}
+
 watch([xLight, yLight, zLight], () => {
   const lightPosition = new Vector3(xLight.value, yLight.value, zLight.value)
   gl.uniform3fv(u_LightPosition, lightPosition.elements)
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
   gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_BYTE, 0)
+})
+
+watch(isRotated, isAnimation => {
+  if (isAnimation) {
+    animation()
+  } else {
+    cancelAnimationFrame(animationId)
+  }
 })
 
 watch(envLight, light => {
