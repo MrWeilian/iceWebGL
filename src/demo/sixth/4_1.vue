@@ -168,7 +168,7 @@ const initGl = () => {
 }
 
 const animation = () => {
-  baseMvpMatrix.rotate(1, 0, 1, 0)
+  baseMvpMatrix.rotate(0.5, 0, 1, 0)
   gl.uniformMatrix4fv(u_MvpMatrix, false, baseMvpMatrix.elements)
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
   gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_BYTE, 0)

@@ -58,7 +58,7 @@ const vertexCode = `
     gl_Position = u_MvpMatrix * u_ModelMatrix * a_Position;
     vec3 normal = normalize(vec3(u_NormalMatrix * vec4(a_Normal, 1.0)));
 
-    vec3 lightDirection = normalize(u_LightPosition - vec3(a_Position));
+    vec3 lightDirection = normalize(u_LightPosition - vec3(u_ModelMatrix * a_Position));
     // 求光线、法向量点积
     float dotProduct = dot(normal, lightDirection);
     vec4 ambient = a_Color * u_AmbientColor;
@@ -177,7 +177,7 @@ const initGl = () => {
 }
 
 const animation = () => {
-  rotateMatrix.rotate(1, 0, 1, 0)
+  rotateMatrix.rotate(0.5, 0, 1, 0)
   gl.uniformMatrix4fv(u_ModelMatrix, false, rotateMatrix.elements)
 
   const normalMatrix = new Matrix4()
