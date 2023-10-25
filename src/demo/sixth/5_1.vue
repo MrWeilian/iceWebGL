@@ -47,32 +47,37 @@ const vertexCode = `
   attribute vec4 a_Color;
   attribute vec3 a_Normal;
   varying vec4 v_Color;
+  varying vec4 v_Position;
+  varying vec3 v_Normal;
   uniform mat4 u_MvpMatrix;
   uniform mat4 u_ModelMatrix;
   uniform mat4 u_NormalMatrix;
-  uniform vec4 u_LightColor;
-  uniform vec3 u_LightPosition;
-  uniform vec4 u_AmbientColor;
 
   void main () {
     gl_Position = u_MvpMatrix * u_ModelMatrix * a_Position;
-    vec3 normal = normalize(vec3(u_NormalMatrix * vec4(a_Normal, 1.0)));
-
-    vec3 lightDirection = normalize(u_LightPosition - vec3(u_ModelMatrix * a_Position));
-    // 求光线、法向量点积
-    float dotProduct = dot(normal, lightDirection);
-    vec4 ambient = a_Color * u_AmbientColor;
-    vec3 colorRes = vec3(u_LightColor) * vec3(a_Color) * dotProduct;
-    v_Color= vec4(colorRes, a_Color.a) + ambient;
+    v_Position = u_ModelMatrix * a_Position;
+    v_Normal = normalize(vec3(u_NormalMatrix * vec4(a_Normal, 1.0)));
+    v_Color = a_Color;
   }
 `
 
 const fragmentCode = `
   precision mediump float;
   varying vec4 v_Color;
+  varying vec4 v_Position;
+  varying vec3 v_Normal;
+  uniform vec4 u_LightColor;
+  uniform vec3 u_LightPosition;
+  uniform vec4 u_AmbientColor;
 
   void main () {
-    gl_FragColor = v_Color;
+    vec3 lightDirection = normalize(u_LightPosition - vec3(v_Position));
+    // 求光线、法向量点积
+    float dotProduct = dot(v_Normal, lightDirection);
+    vec4 ambient = v_Color * u_AmbientColor;
+    vec3 colorRes = vec3(u_LightColor) * vec3(v_Color) * dotProduct;
+
+    gl_FragColor = vec4(colorRes, v_Color.a) + ambient;
   }
 `
 
