@@ -9,7 +9,7 @@ const outPutBasePath = () => {
   return path.resolve(__dirname, '../.vitepress/configs')
 }
 
-const chineseIndex = ['一', '二', '三', '四', '五', '六']
+const chineseIndex = ['一', '二', '三', '四', '五', '六', '七', '八', '九']
 
 export const chineseSortFn = (a, b) => {
   const aChineseNumber = a.split('、')[0]
