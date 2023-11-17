@@ -66,6 +66,9 @@ importers:
       three:
         specifier: ^0.153.0
         version: 0.153.0
+      wavefront-obj-parser:
+        specifier: ^2.0.1
+        version: 2.0.1
 
   src/utils:
     dependencies:
@@ -1540,6 +1543,11 @@ packages:
       '@vue/runtime-dom': 3.3.4
       '@vue/server-renderer': 3.3.4(vue@3.3.4)
       '@vue/shared': 3.3.4
+
+  /wavefront-obj-parser@2.0.1:
+    resolution: {integrity: sha512-/jQ6YJY96nL5gASw+gk0XP73DSGJE0zGrmL+19BVssvSEUOxXyKrW6v8Ozk6qAsd/bh0BtshYV0/kjjupZw9Pw==}
+    hasBin: true
+    dev: false
 
   /webpack-sources@3.2.3:
     resolution: {integrity: sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==}

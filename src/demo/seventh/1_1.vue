@@ -12,10 +12,12 @@ import {
 } from '@ice-webgl/utils'
 import { Matrix4, Vector3, Vector4 } from '../cuon-matrix'
 import axios from 'axios';
+import parseWFObj from 'wavefront-obj-parser'
 
 const readOBJFile = async () => {
   const res = await axios.get('/models/fan/Colling Fan.obj')
-  console.log(res)
+  const parseObject = parseWFObj(res.data)
+  console.log(parseObject)
 
 }
 
