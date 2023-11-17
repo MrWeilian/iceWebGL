@@ -5,6 +5,7 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
     "@ice-webgl/utils": "workspace:*",
+    "axios": "^1.6.2",
     "element-plus": "^2.3.4",
     "three": "^0.153.0"
   }
