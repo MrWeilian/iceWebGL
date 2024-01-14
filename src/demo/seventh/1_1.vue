@@ -29,12 +29,13 @@ const vertexCode = `
 
   void main () {
     gl_Position = u_MvpMatrix * a_Position;
-    vec3 normal = normalize(a_Normal);
-    vec3 normalizeLightDirection = normalize(u_LightDirection);
+    // vec3 normal = normalize(a_Normal);
+    // vec3 normalizeLightDirection = normalize(u_LightDirection);
     // 求光线、法向量点积
-    float dotProduct = dot(normal, normalizeLightDirection);
-    vec3 colorRes = vec3(u_LightColor) * vec3(a_Color) * dotProduct;
-    v_Color= vec4(colorRes, a_Color.a);
+    // float dotProduct = dot(normal, normalizeLightDirection);
+    // vec3 colorRes = vec3(u_LightColor) * vec3(a_Color) * dotProduct;
+    // v_Color= vec4(colorRes, a_Color.a);
+    v_Color= vec4(0., 0., 0., 1.);
   }
 `
 
@@ -99,7 +100,7 @@ const initGl = ({ vertexPositions, vertexPositionIndices, vertexNormals }) => {
 const readOBJFile = async () => {
   const res = await axios.get('/models/fan/Colling Fan.obj')
   const parseObject = parseWFObj(res.data)
-  console.log(parseObject)
+  console.log('parseObject', parseObject)
   initGl(parseObject)
 }
 
