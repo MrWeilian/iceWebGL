@@ -47,12 +47,12 @@ const initFn = () => {
   renderer = new THREE.WebGLRenderer();
   let ambientLight = new THREE.AmbientLight(0x999999);
   // 点光源 就像灯泡一样的效果  白色灯光 亮度0.6
-  let pointLight = new THREE.PointLight(0xffffff, 0.8);
+  let pointLight = new THREE.PointLight(0xffffff, 0.3);
   camera.position.set(0, 1, 6);
   scene.add(ambientLight);
   // 将灯光加到摄像机中 点光源跟随摄像机移动
   // 为什么这样做  因为这样可以让后期处理时的辉光效果更漂亮
-  // camera.add(pointLight);
+  camera.add(pointLight);
   const loader = new OBJLoader();
   const MTLloader = new MTLLoader();
   renderer.setSize( canvasRef.value.offsetWidth, canvasRef.value.offsetHeight );
