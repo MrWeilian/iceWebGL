@@ -23,15 +23,8 @@ const cameraPosition = ref([1, 1, 6])
 let camera, renderer, scene, controls
 
 const moveOption = (diffX: number, diffY: number) => {
-  const position = cameraPosition.value;
-  // camera.position.set(position[0] + diffX, position[1] + diffY, position[2])
   controls.update();
   renderer.render(scene, camera);
-}
-
-const upOption = (endX: number, endY: number) => {
-  const originPosition = cameraPosition.value;
-  cameraPosition.value = [originPosition[0] + endX, originPosition[1] + endY, originPosition[2]];
 }
 
 const {
@@ -39,7 +32,7 @@ const {
   mousemove,
   mouseleave,
   mouseup
-} = useMouseCamera({ moveOption, upOption })
+} = useMouseCamera({ moveOption })
 
 const initFn = () => {
   camera = new THREE.PerspectiveCamera( 60, canvasRef.value.offsetWidth / canvasRef.value.offsetHeight, 1, 100);

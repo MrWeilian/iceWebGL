@@ -2,7 +2,7 @@ import { ref } from 'vue'
 
 interface TCameraOptions {
   moveOption: (diffX: number, diffY: number) => void
-  upOption: (endX: number, endY: number) => void
+  upOption?: (endX: number, endY: number) => void
 }
 
 const calc = (arg: number) => {
