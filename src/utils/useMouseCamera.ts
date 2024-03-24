@@ -3,6 +3,7 @@ import { ref } from 'vue'
 interface TCameraOptions {
   moveOption: (diffX: number, diffY: number) => void
   upOption?: (endX: number, endY: number) => void
+  downOption?: (startX: number, startY: number) => void
 }
 
 const calc = (arg: number) => {
@@ -10,7 +11,7 @@ const calc = (arg: number) => {
   return arg / basic
 }
 
-export function useMouseCamera ({ moveOption, upOption }: TCameraOptions) {
+export function useMouseCamera ({ moveOption, upOption, downOption }: TCameraOptions) {
 
   const canDrag = ref(false)
 
@@ -31,6 +32,8 @@ export function useMouseCamera ({ moveOption, upOption }: TCameraOptions) {
     
     mouseDownX = e.offsetX
     mouseDownY = e.offsetY
+
+    downOption(mouseDownX, mouseDownY);
   }
 
   const mouseleave = () => {
