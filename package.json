@@ -7,6 +7,7 @@
   },
   "author": "井柏然",
   "devDependencies": {
+    "prettier": "^3.2.5",
     "typescript": "^5.0.4"
   },
   "dependencies": {
