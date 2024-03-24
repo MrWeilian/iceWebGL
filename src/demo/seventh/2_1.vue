@@ -10,12 +10,12 @@
 </template>
 
 <script setup lang="ts">
-import * as THREE from "three";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
-import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
-import { onMounted, ref } from "vue";
-import { useMouseCamera } from "@ice-webgl/utils/useMouseCamera";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import * as THREE from 'three';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
+import { onMounted, ref } from 'vue';
+import { useMouseCamera } from '@ice-webgl/utils/useMouseCamera';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 const canvasRef = ref(null);
 const isDrag = ref(false);
@@ -63,28 +63,27 @@ const initFn = () => {
   renderer.setSize(canvasRef.value.offsetWidth, canvasRef.value.offsetHeight);
   canvasRef.value.appendChild(renderer.domElement);
   // console.log('loader', loader);
-  MTLloader.load("/models/car/Car/Car_Obj.mtl", function (materials) {
+  MTLloader.load('/models/car/Car/Car_Obj.mtl', function (materials) {
     loader.setMaterials(materials);
     loader.load(
-      "/models/car/Car/Car Obj.obj",
+      '/models/car/Car/Car Obj.obj',
 
-      // onLoad回调
-      // Here the loaded data is assumed to be an object
       function (obj) {
         scene.add(obj);
         controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableZoom = false;
         controls.update();
         renderer.render(scene, camera);
       },
 
       // onProgress回调
       function (xhr) {
-        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+        console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
       },
 
       // onError回调
       function (err) {
-        console.error("An error happened");
+        console.error('An error happened');
       },
     );
   });
@@ -96,10 +95,10 @@ onMounted(() => {
 </script>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: "Seventh2_1",
+  name: 'Seventh2_1',
 });
 </script>
 
