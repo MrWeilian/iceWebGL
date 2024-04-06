@@ -69,6 +69,7 @@ const initFn = () => {
       '/models/car/Car/Car Obj.obj',
 
       function (obj) {
+        console.log('obj loader', obj)
         scene.add(obj);
         controls = new OrbitControls(camera, renderer.domElement);
         controls.enableZoom = false;
